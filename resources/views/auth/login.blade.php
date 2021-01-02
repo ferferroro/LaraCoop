@@ -1,6 +1,6 @@
 @extends('layouts.app', [
     'class' => 'login-page',
-    'backgroundImagePath' => 'img/bg/fabio-mangione.jpg'
+    'backgroundImagePath' => 'img/bg/Hello-Cooperative.png'
 ])
 
 @section('content')
@@ -68,9 +68,9 @@
                 <a href="{{ route('password.request') }}" class="btn btn-link">
                     {{ __('Forgot password') }}
                 </a>
-                <a href="{{ route('register') }}" class="btn btn-link float-right">
+                <!-- <a href="{{ route('register') }}" class="btn btn-link float-right">
                     {{ __('Create Account') }}
-                </a>
+                </a> -->
             </div>
         </div>
     </div>

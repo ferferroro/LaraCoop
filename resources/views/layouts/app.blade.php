@@ -27,7 +27,7 @@ The above copyright notice and this permission notice shall be included in all c
 
     <!-- Extra details for Live View on GitHub Pages -->
     <!-- Canonical SEO -->
-    <link rel="canonical" href="https://www.creative-tim.com/product/paper-dashboard-laravel" />
+    <link rel="canonical" href="" />
 
 
     <!--  Social tags      -->
@@ -36,33 +36,33 @@ The above copyright notice and this permission notice shall be included in all c
 
 
     <!-- Schema.org markup for Google+ -->
-    <meta itemprop="name" content="Paper Dashboard Laravel by Creative Tim">
-    <meta itemprop="description" content="Start your development with a Bootstrap 4 Admin Dashboard built for Laravel Framework 5.5 and Up.">
+    <meta itemprop="name" content="LaraCoop by Romel Fernando">
+    <meta itemprop="description" content="Lend hands with friends and the world around you on Laravel Cooperative Web Application.">
 
-    <meta itemprop="image" content="https://s3.amazonaws.com/creativetim_bucket/products/209/opt_pd_laravel_thumbnail.jpg">
+    <meta itemprop="image" content="">
 
 
     <!-- Twitter Card data -->
-    <meta name="twitter:card" content="product">
-    <meta name="twitter:site" content="@creativetim">
-    <meta name="twitter:title" content="Paper Dashboard Laravel by Creative Tim">
+    <!-- <meta name="twitter:card" content="product">
+    <meta name="twitter:site" content="@helloCooperative">
+    <meta name="twitter:title" content="LaraCoop by Romel Fernando">
 
-    <meta name="twitter:description" content="Start your development with a Bootstrap 4 Admin Dashboard built for Laravel Framework 5.5 and Up.">
-    <meta name="twitter:creator" content="@creativetim">
-    <meta name="twitter:image" content="https://s3.amazonaws.com/creativetim_bucket/products/209/opt_pd_laravel_thumbnail.jpg">
+    <meta name="twitter:description" content="Lend hands with friends and the world around you on Laravel Cooperative Web Application.">
+    <meta name="twitter:creator" content="@helloCooperative">
+    <meta name="twitter:image" content="https://s3.amazonaws.com/creativetim_bucket/products/209/opt_pd_laravel_thumbnail.jpg"> -->
 
 
     <!-- Open Graph data -->
-    <meta property="fb:app_id" content="655968634437471">
+    <!-- <meta property="fb:app_id" content="655968634437471">
     <meta property="og:title" content="Paper Dashboard Laravel by Creative Tim" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://www.creative-tim.com/live/paper-dashboard-laravel" />
     <meta property="og:image" content="https://s3.amazonaws.com/creativetim_bucket/products/209/opt_pd_laravel_thumbnail.jpg"/>
     <meta property="og:description" content="Start your development with a Bootstrap 4 Admin Dashboard built for Laravel Framework 5.5 and Up." />
-    <meta property="og:site_name" content="Creative Tim" />
+    <meta property="og:site_name" content="Creative Tim" /> -->
     
     <title>
-        {{ __('Paper Dashboard by Creative Tim') }}
+        {{ __('HelloCoop') }}
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
@@ -73,7 +73,7 @@ The above copyright notice and this permission notice shall be included in all c
     <link href="{{ asset('paper') }}/css/bootstrap.min.css" rel="stylesheet" />
     <link href="{{ asset('paper') }}/css/paper-dashboard.css?v=2.0.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link href="{{ asset('paper') }}/demo/demo.css" rel="stylesheet" />
+    <!-- <link href="{{ asset('paper') }}/demo/demo.css" rel="stylesheet" /> -->
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

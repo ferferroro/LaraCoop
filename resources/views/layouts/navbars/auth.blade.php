@@ -1,12 +1,12 @@
 <div class="sidebar" data-color="white" data-active-color="danger">
     <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+        <a href="{{ route('page.index', 'dashboard') }}" class="simple-text logo-mini">
             <div class="logo-image-small">
                 <img src="{{ asset('paper') }}/img/logo-small.png">
             </div>
         </a>
-        <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-            {{ __('Coop') }}
+        <a href="{{ route('page.index', 'dashboard') }}" class="simple-text logo-normal">
+            {{ __('HelloCoop') }} 
         </a>
     </div>
     <div class="sidebar-wrapper">

@@ -50,6 +50,12 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('destroy', 'BorrowerController@destroy')->name('borrower.destroy');
 	});
 
+	// Company routes
+	Route::group(['prefix' => 'company'], function ($router) {
+		Route::get('edit', 'CompanyController@edit')->name('company.edit');
+		Route::post('update', 'CompanyController@update')->name('company.update');
+	});
+
 });
 
 Route::group(['middleware' => 'auth'], function () {
