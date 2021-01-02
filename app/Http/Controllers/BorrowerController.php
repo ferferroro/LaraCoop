@@ -127,9 +127,7 @@ class BorrowerController extends Controller
         
         Session::flash('success_message', "Borrower ID [' $borrower_id '] has been updated!");
 
-        return view('pages.borrower_edit')
-            ->with('borrower',  $borrower)
-            ->with('success_message', 'Record has been updated!');
+        return redirect()->route('borrower.edit', ['id' => $borrower_id]);
     }
 
     /**

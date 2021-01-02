@@ -63,13 +63,17 @@ class MemberController extends Controller
         $member->refresh();
 
         // get back to members list and show only this record
-        $members = DB::table('members')
-                ->where('id', '=', $member->id )
-                ->paginate(15);
+        // $members = DB::table('members')
+        //         ->where('id', '=', $member->id )
+        //         ->paginate(15);
 
-        return view('pages.members')
-            ->with('members',  $members)
-            ->with('search_string', $member->search_text);
+        // return view('pages.members')
+        //     ->with('members',  $members)
+        //     ->with('search_string', $member->search_text);
+        
+        Session::flash('success_message', "Member ID [' $member->id '] has been added!");
+
+        return redirect()->route('member.index');
 
     }
 
@@ -131,9 +135,8 @@ class MemberController extends Controller
         
         Session::flash('success_message', "Member ID [' $member_id '] has been updated!");
 
-        return view('pages.member_edit')
-            ->with('member',  $member)
-            ->with('success_message', 'Record has been updated!');
+        return redirect()->route('member.edit', ['id' => $member_id]);
+    
     }
 
     /**
