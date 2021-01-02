@@ -15,6 +15,19 @@
                             <p class="@if(Auth::guest()) text-white @endif text-lead mt-3 mb-0">
                                 {{ __('Lend hands with friends and the world around you on Hello Cooperative Web Application.') }}
                             </p>
+
+                            <br>
+
+                            @if (\App\Setups\AppSetup::instance()->setupHasBeenRan())
+                                <a href="{{ route('login') }}" class="btn btn-warning">
+                                    {{ __('Manage your Cooperative') }}
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-warning">
+                                    {{ __('Register Defaults') }}
+                                </a>
+                            @endif
+                            
                         </div>
                     </div>
                 </div>
