@@ -18,11 +18,16 @@
                 </a>
             </li>
 
-            
+            <li class="{{ $elementActive == 'company' ? 'active' : '' }}">
+                <a href="{{ route('page.index', 'company') }}">
+                    <i class="nc-icon nc-shop"></i>
+                    <p>{{ __('Company') }}</p>
+                </a>
+            </li>
 
             <li class="{{ $elementActive == 'members' ? 'active' : '' }}">
                 <a href="{{ route('member.index') }}">
-                    <i class="nc-icon nc-badge"></i>
+                    <i class="nc-icon nc-layout-11"></i>
                     <p>{{ __('Members') }}</p>
                 </a>
             </li>
@@ -34,13 +39,7 @@
                 </a>
             </li>
 
-            <li class="{{ $elementActive == 'company' ? 'active' : '' }}">
-                <a href="{{ route('page.index', 'company') }}">
-                    <i class="nc-icon nc-shop"></i>
-                    <p>{{ __('Company') }}</p>
-                </a>
-            </li>
-
+            
             <hr>
 
 

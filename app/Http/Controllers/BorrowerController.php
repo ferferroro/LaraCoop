@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Member;
 use Illuminate\Support\Facades\DB;
 use Session;
+use App\Borrower;
 
-class MemberController extends Controller
+class BorrowerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,12 +18,12 @@ class MemberController extends Controller
     {
         $search_string = $request['search_string'] ?? '';
         
-        $members = DB::table('members')
+        $borrowers = DB::table('borrowers')
                 ->where('search_text', 'like', '%' . $search_string . '%' )
                 ->paginate(15);
 
-        return view('pages.members')
-            ->with('members',  $members)
+        return view('pages.borrowers')
+            ->with('borrowers',  $borrowers)
             ->with('search_string', $search_string);
     }
 
@@ -34,7 +34,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-        return view('pages.member_add');
+        return view('pages.borrower_add');
     }
 
     /**
@@ -49,28 +49,27 @@ class MemberController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'order' => 'required|integer',
-            'address' => 'required|string|max:255',
-            'monthly_contribution' => 'required|numeric|min:1',
-            'distribution_schedule' => 'required|date',
             'primary_contact' => 'required|string|max:255',
-
+            'address' => 'required|string|max:255',
+            'percent_interest' => 'required|numeric|min:1',
+            'percent_penalty' => 'required|numeric|min:1',
+            'date_joined' => 'required|date',
         ]);
 
-        $member = new Member;
-        $member->fill($validated);
-        $member->search_text = $member->name . ' ' . $member->order . ' ' . $member->address . ' ' . $member->primary_contact; 
-        $member->save();
-        $member->refresh();
+        $borrower = new Borrower;
+        $borrower->fill($validated);
+        $borrower->search_text = "$borrower->name $borrower->order $borrower->address $borrower->primary_contact $borrower->interest_rate $borrower->penalty_rate $borrower->date_joined";
+        $borrower->save();
+        $borrower->refresh();
 
-        // get back to members list and show only this record
-        $members = DB::table('members')
-                ->where('id', '=', $member->id )
+        // get back to borrowers list and show only this record
+        $borrowers = DB::table('borrowers')
+                ->where('id', '=', $borrower->id )
                 ->paginate(15);
 
-        return view('pages.members')
-            ->with('members',  $members)
-            ->with('search_string', $member->search_text);
+        Session::flash('success_message', "Borrower ID [' $borrower->id '] has been added!");
 
+        return redirect()->route('borrower.index');
     }
 
     /**
@@ -92,14 +91,12 @@ class MemberController extends Controller
      */
     public function edit(Request $request)
     {
+        $borrower_id = $request['id'] ?? 0;
 
-        $member_id = $request['id'] ?? 0;
+        $borrower = Borrower::findOrFail($borrower_id);
 
-        $member = Member::findOrFail($member_id);
-
-        return view('pages.member_edit')
-            ->with('member',  $member);
-
+        return view('pages.borrower_edit')
+            ->with('borrower',  $borrower);
     }
 
     /**
@@ -114,25 +111,24 @@ class MemberController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'order' => 'required|integer',
-            'address' => 'required|string|max:255',
-            'monthly_contribution' => 'required|numeric|min:1',
-            'total_contribution' => 'required|numeric|min:1',
-            'distribution_schedule' => 'required|date',
             'primary_contact' => 'required|string|max:255',
-
+            'address' => 'required|string|max:255',
+            'percent_interest' => 'required|numeric|min:1',
+            'percent_penalty' => 'required|numeric|min:1',
+            'date_joined' => 'required|date',
         ]);
 
-        $member_id = $request['id'] ?? 0;
-        $member = Member::findOrFail($member_id);
+        $borrower_id = $request['id'] ?? 0;
+        $borrower = Borrower::findOrFail($borrower_id);
 
-        $member->fill($validated);
-        $member->search_text = $member->name . ' ' . $member->order . ' ' . $member->address . ' ' . $member->primary_contact; 
-        $member->save();
+        $borrower->fill($validated);
+        $borrower->search_text = "$borrower->name $borrower->order $borrower->address $borrower->primary_contact $borrower->interest_rate $borrower->penalty_rate $borrower->date_joined";
+        $borrower->save();
         
-        Session::flash('success_message', "Member ID [' $member_id '] has been updated!");
+        Session::flash('success_message', "Borrower ID [' $borrower_id '] has been updated!");
 
-        return view('pages.member_edit')
-            ->with('member',  $member)
+        return view('pages.borrower_edit')
+            ->with('borrower',  $borrower)
             ->with('success_message', 'Record has been updated!');
     }
 
@@ -145,15 +141,14 @@ class MemberController extends Controller
     public function destroy(Request $request)
     {
         // find the record and delete it
-        $member_id = $request['id'] ?? 0;
-        $member = Member::findOrFail($member_id);
-        $member->delete();
+        $borrower_id = $request['id'] ?? 0;
+        $borrower = Borrower::findOrFail($borrower_id);
+        $borrower->delete();
 
         // create success message 
-        Session::flash('success_message', "Member ID [' $member_id '] has been deleted!");
+        Session::flash('success_message', "Borrower ID [' $borrower_id '] has been deleted!");
 
-        // go back to the member lists
-        return redirect()->route('member.index');
-
+        // go back to the index page
+        return redirect()->route('borrower.index');
     }
 }

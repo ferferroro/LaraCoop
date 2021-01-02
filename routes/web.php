@@ -30,11 +30,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
-	// all resource functions on member controller
-	// Route::resource('member', 'MemberController');
-	
-	// Route::get('member.index', 'MemberController@index')->name('search_string');
-
 	// Member routes
 	Route::group(['prefix' => 'member'], function ($router) {
 		Route::get('index', 'MemberController@index')->name('member.index');
@@ -47,12 +42,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Borrower routes
 	Route::group(['prefix' => 'borrower'], function ($router) {
-		Route::get('index', 'BorrowerController@index')->name('member.index');
-		Route::get('create', 'BorrowerController@create')->name('member.create');
-		Route::post('store', 'BorrowerController@store')->name('member.store');
-		Route::get('edit', 'BorrowerController@edit')->name('member.edit');
-		Route::post('update', 'BorrowerController@update')->name('member.update');
-		Route::post('destroy', 'BorrowerController@destroy')->name('member.destroy');
+		Route::get('index', 'BorrowerController@index')->name('borrower.index');
+		Route::get('create', 'BorrowerController@create')->name('borrower.create');
+		Route::post('store', 'BorrowerController@store')->name('borrower.store');
+		Route::get('edit', 'BorrowerController@edit')->name('borrower.edit');
+		Route::post('update', 'BorrowerController@update')->name('borrower.update');
+		Route::post('destroy', 'BorrowerController@destroy')->name('borrower.destroy');
 	});
 
 });
