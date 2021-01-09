@@ -52,6 +52,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Company routes
 	Route::group(['prefix' => 'company'], function ($router) {
+		Route::get('index', 'CompanyController@index')->name('company.index');
+		Route::get('create', 'CompanyController@create')->name('company.create');
+		Route::post('store', 'CompanyController@store')->name('company.store');
 		Route::get('edit', 'CompanyController@edit')->name('company.edit');
 		Route::post('update', 'CompanyController@update')->name('company.update');
 	});

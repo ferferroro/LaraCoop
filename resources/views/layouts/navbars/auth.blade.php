@@ -19,7 +19,7 @@
             </li>
 
             <li class="{{ $elementActive == 'company' ? 'active' : '' }}">
-                <a href="{{ route('page.index', 'company') }}">
+                <a href="{{ route('company.index') }}">
                     <i class="nc-icon nc-shop"></i>
                     <p>{{ __('Company') }}</p>
                 </a>
