@@ -39,8 +39,18 @@
                 </a>
             </li>
 
-            
+            <li class="{{ $elementActive == 'contributions' ? 'active' : '' }}">
+                <a href="{{ route('contribution.index') }}">
+                <i class="nc-icon nc-chart-pie-36"></i>
+                    <p>{{ __('Contributions') }}</p>
+                </a>
+            </li>
+
             <hr>
+
+
+
+
 
 
             <li class="{{ $elementActive == 'user' || $elementActive == 'profile' ? 'active' : '' }}">

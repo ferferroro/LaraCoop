@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('edit', 'MemberController@edit')->name('member.edit');
 		Route::post('update', 'MemberController@update')->name('member.update');
 		Route::post('destroy', 'MemberController@destroy')->name('member.destroy');
+		Route::get('autocomplete', 'MemberController@autocomplete')->name('member.autocomplete');
 	});
 
 	// Borrower routes
@@ -57,6 +58,16 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('store', 'CompanyController@store')->name('company.store');
 		Route::get('edit', 'CompanyController@edit')->name('company.edit');
 		Route::post('update', 'CompanyController@update')->name('company.update');
+	});
+
+	// Contribution routes
+	Route::group(['prefix' => 'contribution'], function ($router) {
+		Route::get('index', 'ContributionController@index')->name('contribution.index');
+		Route::get('create', 'ContributionController@create')->name('contribution.create');
+		Route::post('store', 'ContributionController@store')->name('contribution.store');
+		Route::get('edit', 'ContributionController@edit')->name('contribution.edit');
+		Route::post('update', 'ContributionController@update')->name('contribution.update');
+		Route::post('destroy', 'ContributionController@destroy')->name('contribution.destroy');
 	});
 
 });
