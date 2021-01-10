@@ -17,7 +17,7 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-category">Capacity</p>
+                                    <p class="card-category">Total Fund</p>
                                     <p class="card-title">150GB
                                         <p>
                                 </div>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-category">Revenue</p>
+                                    <p class="card-category">Available Fund</p>
                                     <p class="card-title">$ 1,345
                                         <p>
                                 </div>
@@ -69,7 +69,7 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-category">Errors</p>
+                                    <p class="card-category">Lended</p>
                                     <p class="card-title">23
                                         <p>
                                 </div>
@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-category">Followers</p>
+                                    <p class="card-category">Profit</p>
                                     <p class="card-title">+45K
                                         <p>
                                 </div>
