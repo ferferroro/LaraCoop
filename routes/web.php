@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('edit', 'BorrowerController@edit')->name('borrower.edit');
 		Route::post('update', 'BorrowerController@update')->name('borrower.update');
 		Route::post('destroy', 'BorrowerController@destroy')->name('borrower.destroy');
+		Route::get('get_borrower', 'BorrowerController@get_borrower')->name('borrower.get_borrower');
 	});
 
 	// Company routes
@@ -68,6 +69,22 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('edit', 'ContributionController@edit')->name('contribution.edit');
 		Route::post('update', 'ContributionController@update')->name('contribution.update');
 		Route::post('destroy', 'ContributionController@destroy')->name('contribution.destroy');
+	});
+
+	// Loan routes
+	Route::group(['prefix' => 'loan'], function ($router) {
+		Route::get('index', 'LoanController@index')->name('loan.index');
+		Route::get('create', 'LoanController@create')->name('loan.create');
+		Route::post('store', 'LoanController@store')->name('loan.store');
+		Route::get('edit', 'LoanController@edit')->name('loan.edit');
+		Route::post('update', 'LoanController@update')->name('loan.update');
+		Route::post('destroy', 'LoanController@destroy')->name('loan.destroy');		
+		Route::post('approve', 'LoanController@approve')->name('loan.approve');
+
+		Route::group(['prefix' => 'detail'], function ($router) {
+			Route::post('pay', 'LoanDetailController@pay')->name('loan.detail.pay');
+		});
+
 	});
 
 });

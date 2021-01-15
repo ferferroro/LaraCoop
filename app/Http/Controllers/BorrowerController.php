@@ -149,4 +149,22 @@ class BorrowerController extends Controller
         // go back to the index page
         return redirect()->route('borrower.index');
     }
+
+    /**
+     * Get borrower interest percentage
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function get_borrower(Request $request)
+    {
+        // find the record and delete it
+        $borrower_id = $request['id'] ?? 0;
+        $borrower = Borrower::findOrFail($borrower_id);
+
+        // go back to the index page
+        return $borrower;
+    }
+
+    
 }

@@ -46,6 +46,13 @@
                 </a>
             </li>
 
+            <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
+                <a href="{{ route('loan.index') }}">
+                <i class="nc-icon nc-money-coins"></i>
+                    <p>{{ __('Loans') }}</p>
+                </a>
+            </li>
+
             <hr>
 
 

@@ -116,7 +116,9 @@ The above copyright notice and this permission notice shall be included in all c
     <script src="{{ asset('paper') }}/demo/demo.js"></script>
     <!-- Sharrre libray -->
     <script src="../assets/demo/jquery.sharrre.js"></script>
-    
+
+   <!--   Custom JS Files   -->
+   <script src="{{ asset('paper') }}/js/custom/custom.js"></script>    
     @stack('scripts')
 
     @include('layouts.navbars.fixed-plugin-js')

@@ -1,6 +1,6 @@
 @extends('layouts.app', [
     'class' => '',
-    'elementActive' => 'contributions'
+    'elementActive' => 'loans'
 ])
 
 @section('content')
@@ -12,20 +12,20 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-12">
-                                <form action="{{ route('contribution.index') }}" method="GET" enctype="multipart/form-data">
+                                <form action="{{ route('loan.index') }}" method="GET" enctype="multipart/form-data">
                                     @csrf
                                     @method('GET')
                                     <div class="form-group">
-                                        <h3 class="mb-0">Contributions</h3>
+                                        <h3 class="mb-0">Loans</h3>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="search_string" class="form-control" id="searchContribution" aria-describedby="searchContributionHelp" placeholder="Search" value="{{ $search_string ?? '' }}">
+                                        <input type="text" name="search_string" class="form-control" id="searchLoan" aria-describedby="searchLoanHelp" placeholder="Search" value="{{ $search_string ?? '' }}">
                                     </div>
 
                                     <div class="form-group text-right">
                                         <button type="submit" class="btn btn-primary">Search</button>
                                         
-                                        <a href="{{ route('contribution.create') }}" class="btn btn-primary btn-md">
+                                        <a href="{{ route('loan.create') }}" class="btn btn-primary btn-md">
                                             &nbsp; Add &nbsp;
                                         </a>
                                     </div>
@@ -47,44 +47,57 @@
                             <table class="table">
                                 <thead class=" text-primary">
                                     <tr>
-                                        <th> ID </th>
-                                        <th> Member ID </th>
+                                        <th> Loan ID </th>
+                                        <!-- <th> Borrower ID </th> -->
                                         <th> Name </th>
-                                        <th> Period </th>
+                                        <th> Type </th>
+                                        <th> Start </th>
+                                        <th> End </th>
+                                        <th> Terms </th>
+                                        <th> Schedule </th>
+                                        <th> Settled </th>
                                         <th> Amount </th>
-                                        <th> Remarks </th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($contributions as $contribution)
+                                    @foreach ($loans as $loan)
                                        
                                         <tr>
                                             <td>
-                                            <a href="{{ route('contribution.edit', ['id' => $contribution->id]) }}" >
-                                                # {{ $contribution->id }}
-                                            </a>
-                                            <td>
-                                                <a href="{{ route('member.edit', ['id' => $contribution->member_id]) }}" >
-                                                    {{ $contribution->member_id }}
+                                                <a href="{{ route('loan.edit', ['id' => $loan->id]) }}" >
+                                                    # {{ $loan->id }}
                                                 </a>
                                             </td>
+                                            <td>
+                                                <a href="{{ route('borrower.edit', ['id' => $loan->borrower_id]) }}" >
+                                                    {{ $loan->borrower->name }}
+                                                </a>
+                                                
                                             </td>
                                             <td>
-                                                {{ $contribution->member->name }}
+                                                {{ $loan->loan_type }}
                                             </td>
                                             <td>
-                                                {{ $contribution->period }}
+                                                {{ $loan->date_start }}
                                             </td>
                                             <td>
-                                                {{ $contribution->amount }}
+                                                {{ $loan->date_end }}
                                             </td>
                                             <td>
-                                                {{ $contribution->remarks }}
+                                                {{ $loan->terms }}
                                             </td>
-                                            
-                                            
+                                            <td>
+                                                {{ $loan->type_schedule }}
+                                            </td>    
+                                            <td>
+                                                {{ $loan->is_settled }}
+                                            </td>
+                                            <td>
+                                                {{ $loan->amount }}
+                                            </td>
                                         </tr>
+                                        
                                     @endforeach
 
                                     
@@ -96,7 +109,7 @@
                         
                         <div>
                             <br>
-                            {{ $contributions->links() }}
+                            {{ $loans->links() }}
                         </div>
 
                     </div>
