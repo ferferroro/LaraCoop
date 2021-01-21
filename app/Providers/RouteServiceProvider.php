@@ -31,6 +31,13 @@ class RouteServiceProvider extends ServiceProvider
     public const DASHBOARD = '/dashboard';
 
     /**
+     * The path to the "setup_menu" route for your application.
+     *
+     * @var string
+     */
+    public const SETUPMENU = '/setup_menu';
+
+    /**
      * Define your route model bindings, pattern filters, etc.
      *
      * @return void

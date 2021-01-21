@@ -74,6 +74,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'is_master_account' => true, // Flag the initial user as Master Account | from the time I created this - there should only be one Master Account
             'password' => Hash::make($data['password']),
         ]);
     }

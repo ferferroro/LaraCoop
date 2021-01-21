@@ -30,4 +30,17 @@ class PageController extends Controller
 
         return abort(404);
     }
+
+    /**
+     * not found
+
+     */
+    public function not_found()
+    {
+        if (view()->exists("pages.not_found")) {
+            return view("pages.not_found");
+        }
+        return abort(404);
+    }
+
 }

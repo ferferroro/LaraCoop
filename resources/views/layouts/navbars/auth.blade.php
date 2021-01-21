@@ -11,10 +11,62 @@
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
+
+        @forelse (\App\Helper\Helper::getMenuList() as $menu)
+            <li class="{{ $elementActive == $menu->element_name ? 'active' : '' }}">
+                <a href="{{ $menu->link }}">
+                    <i class="{{ $menu->icon_class }}"></i>
+                    <p>{{ $menu->display_name }}</p>
+                </a>
+            </li>
+        @empty
+            <li class="{{ $elementActive == 'setup_menu' ? 'active' : '' }}">
+                <a href="{{ route('menu.setup_view') }}">
+                    <i class="nc-icon nc-lock-circle-open"></i>
+                    <p>{{ __('Setup Menu') }}</p>
+                </a>
+            </li>
+
+        @endforelse
+
+            <hr>
+
+            <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
+                <a href="{{ route('loan.index') }}">
+                <i class="nc-icon nc-single-02"></i>
+                    <p>{{ __('Users') }}</p>
+                </a>
+            </li>
+
+            <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
+                <a href="{{ route('loan.index') }}">
+                <i class="nc-icon nc-single-copy-04"></i>
+                    <p>{{ __('Menu') }}</p>
+                </a>
+            </li>
+
+            <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
+                <a href="{{ route('loan.index') }}">
+                <i class="nc-icon nc-align-left-2"></i>
+                    <p>{{ __('Reports') }}</p>
+                </a>
+            </li>
+
+
+            <hr>
+            <hr>
+
+            <li class="{{ $elementActive == 'setup_menu' ? 'active' : '' }}">
+                <a href="{{ route('menu.setup_view') }}">
+                    <i class="nc-icon nc-lock-circle-open"></i>
+                    <p>{{ __('Setup Menu') }}</p>
+                </a>
+            </li>
+
             <li class="{{ $elementActive == 'dashboard' ? 'active' : '' }}">
                 <a href="{{ route('page.index', 'dashboard') }}">
                     <i class="nc-icon nc-bank"></i>
-                    <p>{{ __('Dashboard') }}</p>
+                    <p>{{ __('Dashboard') }} {{ auth()->user()->is_master_account }} {{ $key ?? 'key' }} {{ $romel ?? 'romel' }}</p>
                 </a>
             </li>
 
