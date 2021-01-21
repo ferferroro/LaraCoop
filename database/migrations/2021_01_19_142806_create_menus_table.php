@@ -24,6 +24,7 @@ class CreateMenusTable extends Migration
             $table->boolean('restricted')->default(false);
             $table->timestamps();
             $table->index(['sequence'], 'idx_001');
+            $table->index(['link'], 'idx_002');
         });
     }
 

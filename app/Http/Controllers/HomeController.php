@@ -1,17 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
+// use App\Http\Middleware\MenuAccessMiddleware;
 
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Require AUth and menu access
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'menu_access']); 
     }
 
     /**
