@@ -56,4 +56,19 @@ class Helper
       }
 
     }
+
+    public static function getSearchText($model)
+    {
+      $search_text = '';
+
+      foreach($model->getAttributes() as $key => $value) {
+
+        if ($key != 'search_text') {
+          $search_text = $search_text . "$value ";
+        }
+      }
+
+      return $search_text;
+
+    }
 }

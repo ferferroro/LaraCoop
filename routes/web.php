@@ -34,12 +34,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::group(['prefix' => 'menu'], function ($router) {
 		Route::post('setup', 'MenuController@setup')->name('menu.setup');
 		Route::get('setup_view', 'MenuController@setup_view')->name('menu.setup_view');
-		// Route::get('index', 'MenuController@index')->name('menu.index');
-		// Route::get('create', 'MenuController@create')->name('menu.create');
-		// Route::post('store', 'MenuController@store')->name('menu.store');
-		// Route::get('edit', 'MenuController@edit')->name('menu.edit');
-		// Route::post('update', 'MenuController@update')->name('menu.update');
-		// Route::post('destroy', 'MenuController@destroy')->name('menu.destroy');
+		Route::get('index', 'MenuController@index')->name('menu.index');
+		Route::get('create', 'MenuController@create')->name('menu.create');
+		Route::post('store', 'MenuController@store')->name('menu.store');
+		Route::get('edit', 'MenuController@edit')->name('menu.edit');
+		Route::post('update', 'MenuController@update')->name('menu.update');
+		Route::post('destroy', 'MenuController@destroy')->name('menu.destroy');
 	});
 
 	// Member routes

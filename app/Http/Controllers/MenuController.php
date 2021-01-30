@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\{Menu, UserMenu};
 use Illuminate\Support\Facades\{DB, View, Auth};
 use App\Helper\Helper;
+use Session;
 
 class MenuController extends Controller
 {
@@ -49,7 +50,7 @@ class MenuController extends Controller
             );
             $user_menu->save();
 
-            
+
 
             // create default company menu
             $route = 'company.index';
@@ -205,6 +206,38 @@ class MenuController extends Controller
             );
             $user_menu->save();
 
+
+
+
+            // create default menu
+            $route = 'menu.index';
+            $menu = new Menu;
+            $menu->fill(
+                [
+                    'element_name' => 'menus',
+                    'display_name' => 'Menus',
+                    'route' => $route,
+                    'link' => route($route),
+                    'sequence' => 7,
+                    'icon_class' => 'nc-icon nc-single-copy-04',
+                    'restricted' => false
+                ]
+            );
+            $menu->save();
+            $menu->refresh();
+
+            // user menu
+            $user_menu = new UserMenu;
+            $user_menu->fill(
+                [
+                    'user_id' => Auth::id(),
+                    'menu_id' => $menu->id,
+                    'sequence' => $menu->sequence,
+                    'updated_by' => Auth::id()
+                ]
+            );
+            $user_menu->save();
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -241,9 +274,17 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        
+        $search_string = $request['search_string'] ?? '';
+
+        $menus = Menu:: where('search_text', 'like', '%' . $search_string . '%' )
+            ->paginate(15);
+
+        return view('pages.menus')
+            ->with('menus',  $menus)
+            ->with('search_string', $search_string);
     }
 
     /**
@@ -253,7 +294,7 @@ class MenuController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.menu_add');
     }
 
     /**
@@ -264,7 +305,23 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'display_name' => 'required|string|max:255',
+            'element_name' => 'required|string|max:255',
+            'route' => 'required|string|max:255',
+            'link' => 'required|string|max:255',
+            'sequence' => 'required|numeric|min:0',
+            'icon_class' => 'required|string|max:255',
+        ]);
+
+        $menu = new Menu;
+        $menu->fill($validated);
+        $menu->save();
+        $menu->refresh();
+        
+        Session::flash('success_message', "Menu ID [' $menu->id '] has been added!");
+
+        return redirect()->route('menu.index');
     }
 
     /**
@@ -284,9 +341,14 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $menu_id = $request['id'] ?? 0;
+
+        $menu = Menu::findOrFail($menu_id);
+
+        return view('pages.menu_edit')
+            ->with('menu',  $menu);
     }
 
     /**
@@ -296,9 +358,26 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'display_name' => 'required|string|max:255',
+            'element_name' => 'required|string|max:255',
+            'route' => 'required|string|max:255',
+            'link' => 'required|string|max:255',
+            'sequence' => 'required|numeric|min:0',
+            'icon_class' => 'required|string|max:255',
+        ]);
+
+        $menu_id = $request['id'] ?? 0;
+        $menu = Menu::findOrFail($menu_id);
+
+        $menu->fill($validated);
+        $menu->save();
+        
+        Session::flash('success_message', "Menu ID [' $menu_id '] has been updated!");
+
+        return redirect()->route('menu.edit', ['id' => $menu_id]);
     }
 
     /**
@@ -307,8 +386,17 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        // find the record and delete it
+        $menu_id = $request['id'] ?? 0;
+        $menu = Menu::findOrFail($menu_id);
+        $menu->delete();
+
+        // create success message 
+        Session::flash('success_message', "menu ID [' $menu_id '] has been deleted!");
+
+        // go back to the menu lists
+        return redirect()->route('menu.index');
     }
 }

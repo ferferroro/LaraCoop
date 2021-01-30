@@ -38,8 +38,8 @@
                 </a>
             </li>
 
-            <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
-                <a href="{{ route('loan.index') }}">
+            <li class="{{ $elementActive == 'menus' ? 'active' : '' }}">
+                <a href="{{ route('menu.index') }}">
                 <i class="nc-icon nc-single-copy-04"></i>
                     <p>{{ __('Menu') }}</p>
                 </a>
