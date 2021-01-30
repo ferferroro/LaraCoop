@@ -24,7 +24,15 @@ class MenuAccessMiddleware
             return $next($request);
         }
 
-        $menu = Menu::where('link', $request->fullUrl())
+        $prefix = $request->route()->getPrefix();
+
+        if (!$prefix) {
+            $prefix = $request->route()->getName();
+        }
+
+        $prefix = str_replace("/","", $prefix);
+
+        $menu = Menu::where('route', 'like', '%' . $prefix . '%')
             ->first();
 
         if ($menu) {
@@ -40,12 +48,11 @@ class MenuAccessMiddleware
                 return $next($request);
             }
             else {
-                return redirect()->route('page.not_found');
+                return abort(404);
             }
         }
         else {
-            return redirect()->route('page.not_found');
+            return abort(404);
         }
-        // return $next($request);
     }
 }
