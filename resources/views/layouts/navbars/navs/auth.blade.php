@@ -8,7 +8,7 @@
                     <span class="navbar-toggler-bar bar3"></span>
                 </button>
             </div>
-            <a class="navbar-brand" href="{{ route('page.index', 'dashboard') }}">{{ __('Coop Management') }}</a>
+            <a class="navbar-brand" href="{{ route('home') }}">{{ __('Coop Management') }}</a>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
             aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@
             </form>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link btn-magnify" href="{{ route('page.index', 'dashboard') }}">
+                    <a class="nav-link btn-magnify" href="{{ route('home') }}">
                         <i class="nc-icon nc-layout-11"></i>
                         <p>
                             <span class="d-lg-none d-md-block">{{ __('Stats') }}</span>

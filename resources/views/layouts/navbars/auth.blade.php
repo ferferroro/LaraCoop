@@ -5,7 +5,7 @@
                 <img src="{{ asset('paper') }}/img/logo-small.png">
             </div>
         </a>
-        <a href="{{ route('page.index', 'dashboard') }}" class="simple-text logo-normal">
+        <a href="{{ route('home') }}" class="simple-text logo-normal">
             {{ __('HelloCoop') }} 
         </a>
     </div>
@@ -31,19 +31,19 @@
 
             <hr>
 
-            <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
-                <a href="{{ route('loan.index') }}">
+            <li class="{{ $elementActive == 'system_users' ? 'active' : '' }}">
+                <a href="{{ route('system_user.index') }}">
                 <i class="nc-icon nc-single-02"></i>
-                    <p>{{ __('Users') }}</p>
+                    <p>{{ __('System Users') }}</p>
                 </a>
             </li>
 
-            <li class="{{ $elementActive == 'menus' ? 'active' : '' }}">
+            <!-- <li class="{{ $elementActive == 'menus' ? 'active' : '' }}">
                 <a href="{{ route('menu.index') }}">
                 <i class="nc-icon nc-single-copy-04"></i>
                     <p>{{ __('Menu') }}</p>
                 </a>
-            </li>
+            </li> -->
 
             <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
                 <a href="{{ route('loan.index') }}">

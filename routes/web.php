@@ -103,6 +103,16 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('not_found', 'PageController@not_found')->name('page.not_found');
 	});
 
+	// System Users routes
+	Route::group(['prefix' => 'system_user'], function ($router) {
+		Route::get('index', 'SystemUserController@index')->name('system_user.index');
+		Route::get('create', 'SystemUserController@create')->name('system_user.create');
+		Route::post('store', 'SystemUserController@store')->name('system_user.store');
+		Route::get('edit', 'SystemUserController@edit')->name('system_user.edit');
+		Route::post('update', 'SystemUserController@update')->name('system_user.update');
+		// Route::post('destroy', 'SystemUserController@destroy')->name('system_user.destroy');
+	});
+
 });
 
 Route::group(['middleware' => 'auth'], function () {

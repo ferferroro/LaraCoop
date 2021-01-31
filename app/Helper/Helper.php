@@ -63,7 +63,7 @@ class Helper
 
       foreach($model->getAttributes() as $key => $value) {
 
-        if ($key != 'search_text') {
+        if ($key != 'search_text' && $key != 'password') {
           $search_text = $search_text . "$value ";
         }
       }

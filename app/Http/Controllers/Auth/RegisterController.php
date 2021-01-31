@@ -75,6 +75,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'is_master_account' => true, // Flag the initial user as Master Account | from the time I created this - there should only be one Master Account
+            'can_approve_loans' => true,
+            'can_apprrove_contributions' => true,
+            'can_transfer_funds' => true,
+            'can_view_other_records' => true,
+            'can_update_records' => true,
             'password' => Hash::make($data['password']),
         ]);
     }

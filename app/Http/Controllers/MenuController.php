@@ -11,6 +11,16 @@ use Session;
 class MenuController extends Controller
 {
     /**
+     * Require AUth and menu access
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'menu_access']); 
+    }
+    
+    /**
      * Setup default menu
      *
      * @return \Illuminate\Http\Response
@@ -220,6 +230,36 @@ class MenuController extends Controller
                     'link' => route($route),
                     'sequence' => 7,
                     'icon_class' => 'nc-icon nc-single-copy-04',
+                    'restricted' => false
+                ]
+            );
+            $menu->save();
+            $menu->refresh();
+
+            // user menu
+            $user_menu = new UserMenu;
+            $user_menu->fill(
+                [
+                    'user_id' => Auth::id(),
+                    'menu_id' => $menu->id,
+                    'sequence' => $menu->sequence,
+                    'updated_by' => Auth::id()
+                ]
+            );
+            $user_menu->save();
+
+
+            // create default users
+            $route = 'system_user.index';
+            $menu = new Menu;
+            $menu->fill(
+                [
+                    'element_name' => 'system_users',
+                    'display_name' => 'System Users',
+                    'route' => $route,
+                    'link' => route($route),
+                    'sequence' => 7,
+                    'icon_class' => 'nc-icon nc-single-02',
                     'restricted' => false
                 ]
             );
