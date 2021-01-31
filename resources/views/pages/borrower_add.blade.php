@@ -30,7 +30,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Order') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="order" class="form-control" placeholder="Order" value="" required>
+                                        <input type="text" name="order" class="form-control" placeholder="Order" value="{{ old('order') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('order'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -42,7 +42,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Name') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="name" class="form-control" placeholder="Name" value="" required>
+                                        <input type="text" name="name" class="form-control" placeholder="Name" value="{{ old('name') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('name'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -54,7 +54,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Primary Contact') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="primary_contact" class="form-control" placeholder="Primary Contact" value="" required>
+                                        <input type="text" name="primary_contact" class="form-control" placeholder="Primary Contact" value="{{ old('primary_contact') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('primary_contact'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -66,7 +66,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Address') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="address" class="form-control" placeholder="Address" value="" required>
+                                        <input type="text" name="address" class="form-control" placeholder="Address" value="{{ old('address') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('address'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -78,7 +78,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Interest Percentage') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="percent_interest" class="form-control" placeholder="Interest Percentage" value="" required>
+                                        <input type="text" name="percent_interest" class="form-control" placeholder="Interest Percentage" value="{{ old('percent_interest') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('percent_interest'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -90,7 +90,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Penalty Percentage') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="percent_penalty" class="form-control" placeholder="Penalty Percentage" value="" required>
+                                        <input type="text" name="percent_penalty" class="form-control" placeholder="Penalty Percentage" value="{{ old('percent_penalty') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('percent_penalty'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -102,7 +102,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Date Joined') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="date" name="date_joined" class="form-control" placeholder="Date Joined" value="" required>
+                                        <input type="date" name="date_joined" class="form-control" placeholder="Date Joined" value="{{ old('date_joined') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('date_joined'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">

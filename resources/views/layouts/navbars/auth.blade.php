@@ -12,7 +12,7 @@
     <div class="sidebar-wrapper">
         <ul class="nav">
 
-        @forelse (\App\Helper\Helper::getMenuList() as $menu)
+        @forelse (Helper::getMenuList() as $menu)
             <li class="{{ $elementActive == $menu->element_name ? 'active' : '' }}">
                 <a href="{{ $menu->link }}">
                     <i class="{{ $menu->icon_class }}"></i>

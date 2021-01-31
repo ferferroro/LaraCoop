@@ -134,17 +134,18 @@
                         <div class="card-footer ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
-        
+                                    @if(Helper::canUpdateRecords())
+                                        <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
+
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#deleteMemberModal">
+                                            Delete
+                                        </button>
+                                        <!-- Button trigger modal -->
+                                    @endif
                                     <a href="{{ route('member.index') }}" class="btn btn-info btn-round">
                                         Cancel
                                     </a>
-
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#deleteMemberModal">
-                                        Delete
-                                    </button>
-                                    <!-- Button trigger modal -->
 
                                     <br><br>
                                 </div>

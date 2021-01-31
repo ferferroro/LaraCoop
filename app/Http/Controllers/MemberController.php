@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Member;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{DB, Auth};
 use Session;
 
 class MemberController extends Controller
@@ -28,10 +28,23 @@ class MemberController extends Controller
     public function index(Request $request)
     {
         $search_string = $request['search_string'] ?? '';
+
+        $user = Auth::user();
+
+        // initilize query
+        $members = (new Member)->newQuery();
+
+        // initialize null match these arrays
+        $match_these = [];
+        $match_these[] =  [ 'search_text', 'like' , '%'. $search_string .'%' ];
         
-        $members = DB::table('members')
-                ->where('search_text', 'like', '%' . $search_string . '%' )
-                ->paginate(15);
+        if($user->can_view_other_records == false) {
+            $match_these[] =  [ 'id', '=' , $user->member_id ];
+        }
+
+        // add where clause
+        $members = $members->where($match_these);
+        $members = $members->paginate(15);
 
         return view('pages.members')
             ->with('members',  $members)
@@ -45,6 +58,7 @@ class MemberController extends Controller
      */
     public function create()
     {
+        
         return view('pages.member_add');
     }
 
@@ -64,7 +78,6 @@ class MemberController extends Controller
             'monthly_contribution' => 'required|numeric|min:1',
             'distribution_schedule' => 'required|date',
             'primary_contact' => 'required|string|max:255',
-
         ]);
 
         $member = new Member;
@@ -131,7 +144,7 @@ class MemberController extends Controller
             'order' => 'required|integer',
             'address' => 'required|string|max:255',
             'monthly_contribution' => 'required|numeric|min:1',
-            'total_contribution' => 'required|numeric|min:1',
+            'total_contribution' => 'required|numeric|min:0',
             'distribution_schedule' => 'required|date',
             'primary_contact' => 'required|string|max:255',
 

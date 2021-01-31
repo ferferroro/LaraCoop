@@ -71,4 +71,11 @@ class Helper
       return $search_text;
 
     }
+
+    public static function canUpdateRecords()
+    {
+        $user = Auth::user();
+
+        return $user->can_update_records;
+    }
 }

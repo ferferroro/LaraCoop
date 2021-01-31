@@ -25,9 +25,12 @@
                                     <div class="form-group text-right">
                                         <button type="submit" class="btn btn-primary">Search</button>
                                         
-                                        <a href="{{ route('member.create') }}" class="btn btn-primary btn-md">
-                                            &nbsp; Add &nbsp;
-                                        </a>
+                                        @if(Helper::canUpdateRecords())
+                                            <a href="{{ route('member.create') }}" class="btn btn-primary btn-md">
+                                                &nbsp; Add &nbsp;
+                                            </a>
+                                        @endif
+                                       
                                     </div>
                                 </form>
                             </div>

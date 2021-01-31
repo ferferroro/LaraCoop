@@ -29,7 +29,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Name') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="name" class="form-control" placeholder="Name" value="" required>
+                                        <input type="text" name="name" class="form-control" placeholder="Name" value="{{ old('name') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('name'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -41,7 +41,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Order') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="order" class="form-control" placeholder="Order" value="" required>
+                                        <input type="text" name="order" class="form-control" placeholder="Order" value="{{ old('order') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('order'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -53,7 +53,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Address') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="address" class="form-control" placeholder="Address" value="" required>
+                                        <input type="text" name="address" class="form-control" placeholder="Address" value="{{ old('address') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('address'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -65,7 +65,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Monthly Contribution') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="monthly_contribution" class="form-control" placeholder="Monthly Contribution" value="" required>
+                                        <input type="text" name="monthly_contribution" class="form-control" placeholder="Monthly Contribution" value="{{ old('monthly_contribution') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('monthly_contribution'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -77,7 +77,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Date Distribute') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="date" name="distribution_schedule" class="form-control" placeholder="Date Distribute" value="" required>
+                                        <input type="date" name="distribution_schedule" class="form-control" placeholder="Date Distribute" value="{{ old('distribution_schedule') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('distribution_schedule'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -89,7 +89,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Primary Contact') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="primary_contact" class="form-control" placeholder="Primary Contact" value="" required>
+                                        <input type="text" name="primary_contact" class="form-control" placeholder="Primary Contact" value="{{ old('primary_contact') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('primary_contact'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -103,7 +103,9 @@
                         <div class="card-footer ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
+                                    @if(Helper::canUpdateRecords())
+                                        <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
+                                    @endif
         
                                     <a href="{{ route('member.index') }}" class="btn btn-info btn-round">
                                         &nbsp; Cancel &nbsp;
