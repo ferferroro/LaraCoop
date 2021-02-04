@@ -16,7 +16,7 @@ class AddSecurityFieldsToUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('contact')->default('');
             $table->boolean('can_approve_loans')->default(false);
-            $table->boolean('can_apprrove_contributions')->default(false);
+            $table->boolean('can_approve_contributions')->default(false);
             $table->boolean('can_transfer_funds')->default(false);
             $table->integer('borrower_id')->nullable();
             $table->integer('member_id')->nullable();
@@ -38,7 +38,7 @@ class AddSecurityFieldsToUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('contact');
             $table->dropColumn('can_approve_loans');
-            $table->dropColumn('can_apprrove_contributions');
+            $table->dropColumn('can_approve_contributions');
             $table->dropColumn('can_transfer_funds');
             $table->dropColumn('borrower_id');
             $table->dropColumn('member_id');

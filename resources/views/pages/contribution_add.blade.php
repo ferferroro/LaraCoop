@@ -27,25 +27,18 @@
                         <div class="card-body">
                             <div class="row">
 
-                            <label class="col-md-2 col-form-label">{{ __('Member ID') }}</label>
+                                <label class="col-md-2 col-form-label">{{ __('Member ID') }}</label>
                                 <div class="col-md-10">
                                     <!-- <div class="form-group">
-                                        <input type="text" name="memberId" class="form-control" placeholder="Member ID" value="" required>
+                                        <input type="text" name="member_id" class="form-control" placeholder="Member ID" value="" required>
                                     </div> -->
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-11">
-                                            <input type="text" name="member_id" class="form-control" placeholder="Member ID" value="" required>
-                                        </div>
-                                        
-                                        <div class="form-group col-md-1 text-left">
-                                            <!-- Button trigger modal start -->
-                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#memberFinderModal">
-                                                <i class="nc-icon nc-zoom-split"></i>  Find
-                                            </button>
-                                            <!-- Button trigger modal end -->
-                                        </div>
-                                        
+                                    <div class="form-group">
+                                        <select name="member_id" class="form-control" id="member_id">
+                                            @foreach ($members as $member)
+                                                <option value="{{ $member->id }}"> {{ $member->id }}  - {{ $member->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     @if ($errors->has('member_id'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -54,7 +47,7 @@
                                     @endif
                                 </div>
 
-                                <label class="col-md-2 col-form-label">{{ __('Name') }}</label>
+                                <!-- <label class="col-md-2 col-form-label">{{ __('Name') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <input type="text" name="name" class="form-control" placeholder="Name" value="" disabled>
@@ -64,12 +57,12 @@
                                             <strong>{{ $errors->first('name') }}</strong>
                                         </span>
                                     @endif
-                                </div>
+                                </div> -->
 
                                 <label class="col-md-2 col-form-label">{{ __('Period') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="period" class="form-control" placeholder="yyyy-mm" value="" required>
+                                        <input type="text" name="period" class="form-control" placeholder="yyyy-mm" value="{{ old('period') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('period'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -81,7 +74,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Amount') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="amount" class="form-control" placeholder="0.00" value="" required>
+                                        <input type="text" name="amount" class="form-control" placeholder="0.00" value="{{ old('amount') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('amount'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -90,10 +83,29 @@
                                     @endif
                                 </div>
 
+                                <label class="col-md-2 col-form-label">{{ __('Fund Collector') }}</label>
+                                <div class="col-md-10">
+
+                                    <div class="form-group">
+                                        <select name="fund_collector" class="form-control" id="fund_collector">
+                                            @foreach ($members as $member)
+                                                @if($member->can_hold_fund)
+                                                    <option value="{{ $member->id }}"> {{ $member->id }}  - {{ $member->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('fund_collector'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('fund_collector') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
                                 <label class="col-md-2 col-form-label">{{ __('Remarks') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="remarks" class="form-control" placeholder="Remarks" value="" required>
+                                        <input type="text" name="remarks" class="form-control" placeholder="Remarks" value="{{ old('remarks') ?? '' }}" >
                                     </div>
                                     @if ($errors->has('remarks'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -123,42 +135,6 @@
                         </div>
                     </div>
                 </form>
-
-                <!-- Form start -->
-                <form class="col-md-12" action="{{ route('member.index') }}" method="GET" enctype="multipart/form-data">
-                    @csrf
-                    @method('GET')
-
-                    <!-- Modal Start  -->
-                    <div class="modal fade" id="memberFinderModal" tabindex="-1" role="dialog" aria-labelledby="memberFinderModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="memberFinderModalLabel">Find Member</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <h4>
-                                        
-                                        <br> <br>
-                                        This function is not yet implemented
-                                    </h4>
-
-                                    
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <!-- <button type="submit" class="btn btn-secondary">{{ __('Find') }}</button> -->
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
-                    <!-- Modal End-->
-
-                </form>
-                <!-- Form end -->
 
             </div>
         </div>

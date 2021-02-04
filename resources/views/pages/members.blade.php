@@ -62,7 +62,7 @@
                                         <th>
                                             Monthly
                                         </th>
-                                        <th class="text-right">
+                                        <th>
                                             Total
                                         </th>
                                         <th>
@@ -97,16 +97,16 @@
                                             <td>
                                                 {{ $member->primary_contact }}
                                             </td>
-                                            <td class="text-right">
+                                            <td>
                                                 {{ $member->monthly_contribution }}
                                             </td>
-                                            <td class="text-right">
+                                            <td>
                                                 {{ $member->total_contribution }}
                                             </td>
-                                            <td class="text-right">
+                                            <td>
                                                 {{ $member->distribution_schedule }}
                                             </td>
-                                            <td class="text-right">
+                                            <td>
                                                 {{ $member->address }}
                                             </td>
                                         </tr>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Member;
+use App\{Member ,Contribution};
 use Illuminate\Support\Facades\{DB, Auth};
 use Session;
 
@@ -82,7 +82,7 @@ class MemberController extends Controller
 
         $member = new Member;
         $member->fill($validated);
-        $member->search_text = $member->name . ' ' . $member->order . ' ' . $member->address . ' ' . $member->primary_contact; 
+        $member->can_hold_fund = $request->has('can_hold_fund');
         $member->save();
         $member->refresh();
 
@@ -144,7 +144,7 @@ class MemberController extends Controller
             'order' => 'required|integer',
             'address' => 'required|string|max:255',
             'monthly_contribution' => 'required|numeric|min:1',
-            'total_contribution' => 'required|numeric|min:0',
+            // 'total_contribution' => 'required|numeric|min:0',
             'distribution_schedule' => 'required|date',
             'primary_contact' => 'required|string|max:255',
 
@@ -154,7 +154,7 @@ class MemberController extends Controller
         $member = Member::findOrFail($member_id);
 
         $member->fill($validated);
-        $member->search_text = $member->name . ' ' . $member->order . ' ' . $member->address . ' ' . $member->primary_contact; 
+        $member->can_hold_fund = $request->has('can_hold_fund');
         $member->save();
         
         Session::flash('success_message', "Member ID [' $member_id '] has been updated!");
@@ -174,6 +174,13 @@ class MemberController extends Controller
         // find the record and delete it
         $member_id = $request['id'] ?? 0;
         $member = Member::findOrFail($member_id);
+
+        if ($member->total_contribution != 0 || $member->fund_on_hand != 0) {
+            Session::flash('error_message', "Unable to delete! Member ID [' $member_id '] has Contributions or Fund on Hand!");
+
+            return redirect()->route('member.edit', ['id' => $member_id]);
+        }
+
         $member->delete();
 
         // create success message 
@@ -182,5 +189,27 @@ class MemberController extends Controller
         // go back to the member lists
         return redirect()->route('member.index');
 
+    }
+
+    /**
+     * Display a list of member's contributions
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function contributions(Request $request)
+    {
+        $search_string = $request['search_string'] ?? '';
+        $member_id = $request['member_id'] ?? 0;
+        
+        $member = Member::findOrFail($member_id);
+        $member_contributions = Contribution::with('member')
+            ->where('search_text', 'like', '%' . $search_string . '%' )
+            ->where('member_id', '=', $member_id )
+            ->paginate(15);
+
+        return view('pages.member_contributions')
+            ->with('member',  $member)
+            ->with('member_contributions',  $member_contributions)
+            ->with('search_string', $search_string);
     }
 }

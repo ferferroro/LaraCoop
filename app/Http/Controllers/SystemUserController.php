@@ -71,7 +71,7 @@ class SystemUserController extends Controller
             'side_bg_color' => 'required|string|max:255',
             'side_active_color' => 'required|string|max:255',
             // 'can_approve_loans' => 'required|boolean',
-            // 'can_apprrove_contributions' => 'required|boolean',
+            // 'can_approve_contributions' => 'required|boolean',
             // 'can_transfer_funds' => 'required|boolean',
             // 'can_view_other_records' => 'required|boolean',
             // 'can_update_records' => 'required|boolean',
@@ -87,7 +87,7 @@ class SystemUserController extends Controller
             $system_user->fill($validated);
             $system_user->password = Hash::make($system_user->password);
             $system_user->can_approve_loans = $request->has('can_approve_loans');
-            $system_user->can_apprrove_contributions = $request->has('can_apprrove_contributions');
+            $system_user->can_approve_contributions = $request->has('can_approve_contributions');
             $system_user->can_transfer_funds = $request->has('can_transfer_funds');
             $system_user->can_view_other_records = $request->has('can_view_other_records');
             $system_user->can_update_records = $request->has('can_update_records');
@@ -177,7 +177,7 @@ class SystemUserController extends Controller
         DB::beginTransaction();
         try {
             $system_user->can_approve_loans = $request->has('can_approve_loans');
-            $system_user->can_apprrove_contributions = $request->has('can_apprrove_contributions');
+            $system_user->can_approve_contributions = $request->has('can_approve_contributions');
             $system_user->can_transfer_funds = $request->has('can_transfer_funds');
             $system_user->can_view_other_records = $request->has('can_view_other_records');
             $system_user->can_update_records = $request->has('can_update_records');

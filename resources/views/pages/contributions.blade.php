@@ -48,8 +48,8 @@
                                 <thead class=" text-primary">
                                     <tr>
                                         <th> ID </th>
-                                        <th> Member ID </th>
-                                        <th> Name </th>
+                                        <th> Approved </th>
+                                        <th> Member </th>
                                         <th> Period </th>
                                         <th> Amount </th>
                                         <th> Remarks </th>
@@ -65,13 +65,13 @@
                                                 # {{ $contribution->id }}
                                             </a>
                                             <td>
-                                                <a href="{{ route('member.edit', ['id' => $contribution->member_id]) }}" >
-                                                    {{ $contribution->member_id }}
-                                                </a>
-                                            </td>
+                                                {{ $contribution->is_approved ? 'Yes' : 'No' }}
                                             </td>
                                             <td>
-                                                {{ $contribution->member->name }}
+                                                <a href="{{ route('member.edit', ['id' => $contribution->member_id]) }}" >
+                                                    {{ $contribution->member_id }} - {{ $contribution->member->name }}
+                                                </a>
+                                            </td>
                                             </td>
                                             <td>
                                                 {{ $contribution->period }}

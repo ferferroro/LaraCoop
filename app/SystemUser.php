@@ -13,7 +13,7 @@ class SystemUser extends Model
 
     protected $casts = [
         'can_approve_loans' => 'boolean',
-        'can_apprrove_contributions' => 'boolean',
+        'can_approve_contributions' => 'boolean',
         'can_transfer_funds' => 'boolean',
         'can_view_other_records' => 'boolean',
         'can_update_records' => 'boolean',

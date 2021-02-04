@@ -45,6 +45,19 @@ class MenuAccessMiddleware
                 )->first();
             
             if ($user_menu) {
+
+                $route_name = $request->route()->getName();
+
+                // user does not have access to approve contributions throw an error
+                if ($user->can_approve_contributions == false && $route_name == 'contribution.approve') {
+                    return abort(404);
+                }
+
+                // user does not have access to approve loans throw an error
+                if ($user->can_approve_loans == false && $route_name == 'loan.approve') {
+                    return abort(404);
+                }
+
                 return $next($request);
             }
             else {

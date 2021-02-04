@@ -118,9 +118,8 @@
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <select name="borrower_id" class="form-control" id="borrower_id">
-                                        <option value="">{{ $system_user['borrower_id']  ?? 'Select Borrower' }}</option>
                                             @foreach ($borrowers as $borrower)
-                                                <option value="{{ $borrower->id }}"> {{ $borrower->id }}  - {{ $borrower->name }}</option>
+                                                <option value="{{ $borrower->id }}" @if($borrower->id == $system_user['borrower_id']) selected @endif> {{ $borrower->id }}  - {{ $borrower->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -135,9 +134,9 @@
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <select name="member_id" class="form-control" id="member_id">
-                                        <option value="">{{ $system_user['member_id'] ?? 'Select Member' }}</option>
+                                        <!-- <option value="">{{ $system_user['member_id'] ?? 'Select Member' }}</option> -->
                                             @foreach ($members as $member)
-                                                <option value="{{ $member->id }}"> {{ $member->id }}  - {{ $member->name }}</option>
+                                                <option value="{{ $member->id }}" @if($member->id == $system_user['member_id']) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -147,6 +146,8 @@
                                         </span>
                                     @endif
                                 </div>
+
+                                
 
                                 <label class="col-md-2 col-form-label">{{ __('Sidebar Background Color') }}</label>
                                 <div class="col-md-10">

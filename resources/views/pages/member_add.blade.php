@@ -97,6 +97,18 @@
                                         </span>
                                     @endif
                                 </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Can Hold Funds?') }}</label>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input class="form-check-input" type="checkbox"  name="can_hold_fund" value="{{ old('can_hold_fund') ?? '' }}">
+                                    </div>
+                                    @if ($errors->has('can_hold_fund'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('can_hold_fund') }}</strong>
+                                        </span>
+                                    @endif
+                                </div> 
                             </div>
                             
                         </div>

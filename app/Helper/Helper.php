@@ -78,4 +78,11 @@ class Helper
 
         return $user->can_update_records;
     }
+
+    public static function canApproveContributions()
+    {
+        $user = Auth::user();
+
+        return $user->can_approve_contributions;
+    }
 }

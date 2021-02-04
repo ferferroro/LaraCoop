@@ -36,12 +36,28 @@
                                     </button>
                                 </div>
                             @endif
+
+                            @if (Session::has('error_message'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> {{ Session::get('error_message') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
                             
                             <div class="row">
                                 <label class="col-md-2 col-form-label">{{ __('ID') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group disabled">
                                         <input type="text" name="id" class="form-control" placeholder="ID" value="{{ $member['id'] ?? '' }}" disabled>
+                                    </div>
+                                </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Fund on Hand') }}</label>
+                                <div class="col-md-10">
+                                    <div class="form-group disabled">
+                                        <input type="text" name="id" class="form-control" placeholder="fund_on_hand" value="{{ $member['fund_on_hand'] ?? '' }}" disabled>
                                     </div>
                                 </div>
 
@@ -96,7 +112,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Total Contribution') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="total_contribution" class="form-control" placeholder="Total Contribution" value="{{ $member['total_contribution'] ?? 0 }}" required>
+                                        <input type="text" name="total_contribution" class="form-control" placeholder="Total Contribution" value="{{ $member['total_contribution'] ?? 0 }}" disabled>
                                     </div>
                                     @if ($errors->has('total_contribution'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -128,6 +144,19 @@
                                         </span>
                                     @endif
                                 </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Can Hold Funds?') }}</label>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input class="form-check-input" type="checkbox"  name="can_hold_fund" value="" {{  $member['can_hold_fund'] ? 'checked' : '' }}>
+                                    </div>
+                                    @if ($errors->has('can_hold_fund'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('can_hold_fund') }}</strong>
+                                        </span>
+                                    @endif
+                                </div> 
+
                             </div>
                             
                         </div>
@@ -143,6 +172,11 @@
                                         </button>
                                         <!-- Button trigger modal -->
                                     @endif
+
+                                    <a href="{{ route('member.contributions', ['member_id' => $member['id']]) }}" class="btn btn-info btn-round">
+                                        Contributions
+                                    </a>
+
                                     <a href="{{ route('member.index') }}" class="btn btn-info btn-round">
                                         Cancel
                                     </a>

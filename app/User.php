@@ -22,7 +22,7 @@ class User extends Authenticatable
         'is_master_account',
         'contact',
         'can_approve_loans',
-        'can_apprrove_contributions',
+        'can_approve_contributions',
         'can_transfer_funds',
         'borrower_id',
         'member_id',

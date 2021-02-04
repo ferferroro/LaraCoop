@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('update', 'MemberController@update')->name('member.update');
 		Route::post('destroy', 'MemberController@destroy')->name('member.destroy');
 		Route::get('autocomplete', 'MemberController@autocomplete')->name('member.autocomplete');
+		Route::get('contributions', 'MemberController@contributions')->name('member.contributions');
 	});
 
 	// Borrower routes
@@ -81,6 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('edit', 'ContributionController@edit')->name('contribution.edit');
 		Route::post('update', 'ContributionController@update')->name('contribution.update');
 		Route::post('destroy', 'ContributionController@destroy')->name('contribution.destroy');
+		Route::post('approve', 'ContributionController@approve')->name('contribution.approve');
 	});
 
 	// Loan routes
