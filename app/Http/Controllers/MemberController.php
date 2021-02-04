@@ -200,11 +200,18 @@ class MemberController extends Controller
     {
         $search_string = $request['search_string'] ?? '';
         $member_id = $request['member_id'] ?? 0;
+
+        // retrict viewing other records
+        $user = Auth::user();
+        if($user->can_view_other_records == false) {
+            $member_id = $user->member_id;
+        }
         
-        $member = Member::findOrFail($member_id);
-        $member_contributions = Contribution::with('member')
+        $member = Member::where('id', $member_id)
+            ->findOrFail($member_id);
+
+        $member_contributions = Contribution::where('member_id', '=', $member_id )
             ->where('search_text', 'like', '%' . $search_string . '%' )
-            ->where('member_id', '=', $member_id )
             ->paginate(15);
 
         return view('pages.member_contributions')
