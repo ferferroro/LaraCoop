@@ -1,15 +1,4 @@
-function xborrower_id_selected_on_add_loan() {
-    
-    // set text box value here
-    var txt =  document.getElementById('borrower_id');
-    // txt.value = "assign_here";
-    var a = $("#borrower_id").val();
-    console.log(a);
-
-    
-  }
-
-  function borrower_id_selected_on_add_loan() {
+function borrower_id_selected_on_add_loan() {
     $.ajax({
        type:'GET',
        url: "/borrower/get_borrower/",
@@ -23,52 +12,19 @@ function xborrower_id_selected_on_add_loan() {
     });
  }
 
-
-  
-
-// $(document).ready(function(){
-
-//    $('#payLoanDetailModal').on('show', function(e) {
-//       console.log('123');
-//       var link     = e.relatedTarget(),
-//           modal    = $(this),
-//           loan_detail_id = link.data("loan_detail_id"),
-//           loan_detail_type_line    = link.data("loan_detail_type_line");
-   
-//       // modal.find("#loan_detail_id").val(loan_detail_id);
-//       modal.find("#loan_detail_type_line").html(loan_detail_id);
-//       // $('#loan_detail_type_line').html(loan_detail_id);
-//    });
-
-//  });
-
-
-
-
-
-
-
-
-
-
-//  $('#payLoanDetailModal').on('shown.bs.modal', function (e) {
-//    // var link = e.relatedTarget(),
-//    //        modal    = $(this),
-//    //        loan_detail_id = link.data("loan_detail_id"),
-//    //        loan_detail_type_line    = link.data("loan_detail_type_line");
-
-
-//       var ab = $(this).data('loanDetailId');
-
-//       console.log(ab);
-   
-//       // // modal.find("#loan_detail_id").val(loan_detail_id);
-//       // modal.find("loan_detail_type_line").html($(this).data('id'));
-//       // // $('#loan_detail_type_line').html(loan_detail_id);
-      
-//  })
-
-
+ 
+ function member_id_selected_on_add_contribution() {
+   $.ajax({
+      type:'GET',
+      url: "/member/get_member/",
+      data:{
+       id: $("#member_id").val()
+     },
+      success:function(data) {
+         document.getElementById("amount").value = data.monthly_contribution;
+      }
+   });
+}
 
 $('#payLoanDetailModal').on('show.bs.modal', function (event) {
 

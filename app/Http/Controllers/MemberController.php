@@ -219,4 +219,20 @@ class MemberController extends Controller
             ->with('member_contributions',  $member_contributions)
             ->with('search_string', $search_string);
     }
+
+    /**
+     * Get member interest percentage
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function get_member(Request $request)
+    {
+        // find the record and delete it
+        $member_id = $request['id'] ?? 0;
+        $member = Member::findOrFail($member_id);
+
+        // go back to the index page
+        return $member;
+    }
 }

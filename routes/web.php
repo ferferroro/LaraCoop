@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('destroy', 'MemberController@destroy')->name('member.destroy');
 		Route::get('autocomplete', 'MemberController@autocomplete')->name('member.autocomplete');
 		Route::get('contributions', 'MemberController@contributions')->name('member.contributions');
+		Route::get('get_member', 'MemberController@get_member')->name('member.get_member');
 	});
 
 	// Borrower routes

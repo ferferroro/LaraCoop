@@ -34,7 +34,7 @@
                                     </div> -->
 
                                     <div class="form-group">
-                                        <select name="member_id" class="form-control" id="member_id">
+                                        <select name="member_id" class="form-control" id="member_id" onchange="member_id_selected_on_add_contribution()">
                                             @foreach ($members as $member)
                                                 <option value="{{ $member->id }}"> {{ $member->id }}  - {{ $member->name }}</option>
                                             @endforeach
@@ -62,7 +62,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Period') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="period" class="form-control" placeholder="yyyy-mm" value="{{ old('period') ?? '' }}" required>
+                                        <input type="text" name="period" class="form-control" placeholder="yyyy-mm" value="{{ old('period') ?? date('Y') . '-' . date('m') }}" required>
                                     </div>
                                     @if ($errors->has('period'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -74,7 +74,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Amount') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="amount" class="form-control" placeholder="0.00" value="{{ old('amount') ?? '' }}" required>
+                                        <input type="text" id="amount" name="amount" class="form-control" placeholder="0.00" value="{{ old('amount') ?? '' }}" required>
                                     </div>
                                     @if ($errors->has('amount'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
