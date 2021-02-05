@@ -24,7 +24,7 @@
                     @method('POST')
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="title">{{ __('Maintain Loan') }}</h5>
+                            <h5 class="title">{{ __('Maintain Users') }}</h5>
                         </div>
                         <div class="card-body">
 
@@ -118,6 +118,7 @@
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <select name="borrower_id" class="form-control" id="borrower_id">
+                                            <option value="">{{ old('borrower_id') ?? 'Select Borrower' }}</option>
                                             @foreach ($borrowers as $borrower)
                                                 <option value="{{ $borrower->id }}" @if($borrower->id == $system_user['borrower_id']) selected @endif> {{ $borrower->id }}  - {{ $borrower->name }}</option>
                                             @endforeach
@@ -135,6 +136,7 @@
                                     <div class="form-group">
                                         <select name="member_id" class="form-control" id="member_id">
                                         <!-- <option value="">{{ $system_user['member_id'] ?? 'Select Member' }}</option> -->
+                                            <option value="">{{ old('member_id') ?? 'Select Member' }}</option>
                                             @foreach ($members as $member)
                                                 <option value="{{ $member->id }}" @if($member->id == $system_user['member_id']) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
                                             @endforeach
