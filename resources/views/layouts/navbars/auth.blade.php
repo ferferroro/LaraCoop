@@ -29,7 +29,9 @@
 
         @endforelse
 
-            <hr>
+        
+
+            <!-- <hr>
 
             <li class="{{ $elementActive == 'system_users' ? 'active' : '' }}">
                 <a href="{{ route('system_user.index') }}">
@@ -37,13 +39,6 @@
                     <p>{{ __('System Users') }}</p>
                 </a>
             </li>
-
-            <!-- <li class="{{ $elementActive == 'menus' ? 'active' : '' }}">
-                <a href="{{ route('menu.index') }}">
-                <i class="nc-icon nc-single-copy-04"></i>
-                    <p>{{ __('Menu') }}</p>
-                </a>
-            </li> -->
 
             <li class="{{ $elementActive == 'loans' ? 'active' : '' }}">
                 <a href="{{ route('loan.index') }}">
@@ -166,7 +161,7 @@
                     <i class="nc-icon nc-caps-small"></i>
                     <p>{{ __('Typography') }}</p>
                 </a>
-            </li>
+            </li> -->
 
             
             <!-- <li class="active-pro {{ $elementActive == 'upgrade' ? 'active' : '' }} bg-danger">

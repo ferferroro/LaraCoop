@@ -278,6 +278,35 @@ class MenuController extends Controller
             );
             $user_menu->save();
 
+            // create default transfer
+            $route = 'transfer.index';
+            $menu = new Menu;
+            $menu->fill(
+                [
+                    'element_name' => 'transfers',
+                    'display_name' => 'Fund Transfers',
+                    'route' => $route,
+                    'link' => route($route),
+                    'sequence' => 8,
+                    'icon_class' => 'nc-icon nc-delivery-fast',
+                    'restricted' => false
+                ]
+            );
+            $menu->save();
+            $menu->refresh();
+
+            // user menu
+            $user_menu = new UserMenu;
+            $user_menu->fill(
+                [
+                    'user_id' => Auth::id(),
+                    'menu_id' => $menu->id,
+                    'sequence' => $menu->sequence,
+                    'updated_by' => Auth::id()
+                ]
+            );
+            $user_menu->save();
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

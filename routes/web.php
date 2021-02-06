@@ -119,6 +119,17 @@ Route::group(['middleware' => 'auth'], function () {
 		// Route::post('destroy', 'SystemUserController@destroy')->name('system_user.destroy');
 	});
 
+	// Transfer Funds
+	Route::group(['prefix' => 'transfer'], function ($router) {
+		Route::get('index', 'TransferController@index')->name('transfer.index');
+		Route::get('create', 'TransferController@create')->name('transfer.create');
+		Route::post('store', 'TransferController@store')->name('transfer.store');
+		Route::get('edit', 'TransferController@edit')->name('transfer.edit');
+		Route::post('update', 'TransferController@update')->name('transfer.update');
+		Route::post('destroy', 'TransferController@destroy')->name('transfer.destroy');
+		Route::post('accept', 'TransferController@accept')->name('transfer.accept');
+	});
+
 });
 
 Route::group(['middleware' => 'auth'], function () {
