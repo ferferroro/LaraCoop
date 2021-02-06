@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{DB, Auth};
 use Session;
-use App\Borrower;
+use App\{Borrower, Loan};
 
 class BorrowerController extends Controller
 {
@@ -69,7 +69,6 @@ class BorrowerController extends Controller
 
         $borrower = new Borrower;
         $borrower->fill($validated);
-        $borrower->search_text = "$borrower->name $borrower->order $borrower->address $borrower->primary_contact $borrower->interest_rate $borrower->penalty_rate $borrower->date_joined";
         $borrower->save();
         $borrower->refresh();
 
@@ -131,9 +130,7 @@ class BorrowerController extends Controller
 
         $borrower_id = $request['id'] ?? 0;
         $borrower = Borrower::findOrFail($borrower_id);
-
         $borrower->fill($validated);
-        $borrower->search_text = "$borrower->name $borrower->order $borrower->address $borrower->primary_contact $borrower->interest_rate $borrower->penalty_rate $borrower->date_joined";
         $borrower->save();
         
         Session::flash('success_message', "Borrower ID [' $borrower_id '] has been updated!");
@@ -152,6 +149,13 @@ class BorrowerController extends Controller
         // find the record and delete it
         $borrower_id = $request['id'] ?? 0;
         $borrower = Borrower::findOrFail($borrower_id);
+
+        if ($borrower->balance > 0) {
+            Session::flash('error_message', "Unable to delete! Borrower ID $borrower_id!");
+
+            return redirect()->route('borrower.edit', ['id' => $borrower_id]);
+        }
+
         $borrower->delete();
 
         // create success message 
@@ -175,6 +179,34 @@ class BorrowerController extends Controller
 
         // go back to the index page
         return $borrower;
+    }
+
+    /**
+     * Display a list of borrower's loans
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function loans(Request $request)
+    {
+        $search_string = $request['search_string'] ?? '';
+        $borrower_id = $request['borrower_id'] ?? 0;
+
+        // retrict viewing other records
+        $user = Auth::user();
+        if($user->can_view_other_records == false) {
+            $borrower_id = $user->borrower_id;
+        }
+        
+        $borrower = Borrower::findOrFail($borrower_id);
+
+        $borrower_loans = Loan::where('borrower_id', $borrower_id )
+            ->where('search_text', 'like', '%' . $search_string . '%' )
+            ->paginate(15);
+
+        return view('pages.borrower_loans')
+            ->with('borrower',  $borrower)
+            ->with('borrower_loans',  $borrower_loans)
+            ->with('search_string', $search_string);
     }
 
     

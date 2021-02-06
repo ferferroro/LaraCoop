@@ -127,6 +127,18 @@
                                             <strong>{{ $errors->first('fund_available') }}</strong>
                                         </span>
                                     @endif
+                                </div>   
+
+                                <label class="col-md-2 col-form-label">{{ __('Fund Reserved') }}</label>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input type="text" name="fund_reserved" class="form-control" placeholder="0.00" value="{{ $company['fund_reserved'] ?? '' }}" required>
+                                    </div>
+                                    @if ($errors->has('fund_reserved'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('fund_reserved') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>                       
 
                                 <label class="col-md-2 col-form-label">{{ __('Fund Lended') }}</label>

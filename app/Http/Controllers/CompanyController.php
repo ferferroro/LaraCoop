@@ -93,6 +93,7 @@ class CompanyController extends Controller
             'fund_total' => 'required|numeric|min:0',
             'fund_lended' => 'required|numeric|min:0',
             'fund_available' => 'required|numeric|min:0',
+            'fund_reserved' => 'required|numeric|min:0',
             'fund_profit' => 'required|numeric|min:0',
             'date_founded' => 'required|date',
             'mission' => 'required|string|max:255',

@@ -24,7 +24,7 @@
                     @method('POST')
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="title">{{ __('Maintain Loan') }}</h5>
+                            <h5 class="title"> {{ $loan['is_settled'] ? 'View Loan' : 'Maintain Loan' }} </h5>
                         </div>
                         <div class="card-body">
 
@@ -204,7 +204,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Remarks') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="remarks" class="form-control" placeholder="Remarks" value="{{ $loan['remarks'] }}" required>
+                                        <input type="text" name="remarks" class="form-control" placeholder="Remarks" value="{{ $loan['remarks'] }}">
                                     </div>
                                     @if ($errors->has('remarks'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -312,52 +312,62 @@
                         </div>
                         <div class="card-footer ">
                             <div class="row">
-                                <div class="col-md-6 text-left">
+                                <div class="col-md-12 text-right">
 
-                                    <!-- Approve Button trigger modal -->
-                                    @if ($show_button['approve'])
-                                        <button type="button" class="btn btn-info btn-round" 
-                                            data-toggle="modal" 
-                                            data-target="#approveLoanModal" 
-                                            >
-                                            Approve
-                                        </button>
-                                    @endif
-                                    <!-- Approve Button trigger modal -->
+                                    @if(Helper::canUpdateRecords())
 
-                                    <!-- Settle Button trigger modal -->
-                                    @if ($show_button['settle'])
-                                        <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#settleLoanModal">
-                                            Settle
-                                        </button>
-                                    @endif
-                                    <!-- Settle Button trigger modal -->
+                                        @if($loan->is_approved || $loan->is_settled || $loan->is_transferred)
+                                            <!-- dont show any thing -->                                            
+                                        @else
+                                            <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
 
-                                    <!-- Penalty Button trigger modal -->
-                                    @if ($show_button['penalty'])
-                                        <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#penaltyLoanModal">
-                                            Penalty
-                                        </button>
-                                    @endif
-                                    <!-- Penalty Button trigger modal -->
+                                            <!-- Delete Button trigger modal -->
+                                            <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#deleteLoanModal">
+                                                Delete
+                                            </button>
+                                            <!-- Delete Button trigger modal -->
+                                        @endif
+                                        
+                                        @if(Helper::canApproveLoans() && $loan->is_approved == false)
+                                            <!-- Approve Button trigger modal -->
+                                            <button type="button" class="btn btn-info btn-round" 
+                                                data-toggle="modal" 
+                                                data-target="#approveLoanModal" 
+                                                >
+                                                Approve
+                                            </button>
+                                            <!-- Approve Button trigger modal -->
+                                        @endif
 
-                                    
+                                        @if(Helper::canTransferFunds() && $loan->is_transferred == false && $loan->is_approved == true && $loan->is_settled == false)
+                                            <!-- Transfer Button trigger modal -->
+                                            <button type="button" class="btn btn-info btn-round" 
+                                                data-toggle="modal" 
+                                                data-target="#transferLoanModal" 
+                                                >
+                                                Transfer
+                                            </button>
+                                            <!-- Transfer Button trigger modal -->
+                                        @endif
 
-                                    <!-- Delete Button trigger modal -->
-                                    @if ($show_button['delete'])
-                                        <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#deleteLoanModal">
-                                            Delete
-                                        </button>
-                                    @endif
-                                    <!-- Delete Button trigger modal -->
-                                   
-                                </div>
-                                
+                                        @if(Helper::isMasterAccount() && $loan->is_settled == false)
+                                            <!-- Settle Button trigger modal -->
+                                            <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#settleLoanModal">
+                                                Settle
+                                            </button>
+                                            <!-- Settle Button trigger modal -->
+                                        @endif
 
-                                <div class="col-md-6 text-right">
-
-                                    @if ($show_button['save'])
-                                        <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
+                                        
+                                        @if($loan->is_approved && $loan->is_transferred && $loan->is_settled == false )
+                                            <!-- Penalty Button trigger modal -->
+                                            <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#createPenaltyDetailModal">
+                                                Penalty
+                                            </button>
+                                            <!-- Penalty Button trigger modal -->                                   
+                                        @else
+                                            
+                                        @endif
                                     @endif
 
                                     <a href="{{ route('loan.index') }}" class="btn btn-info btn-round">
@@ -418,7 +428,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="approveLoanModalLabel">Delete Loan</h5>
+                                <h5 class="modal-title" id="approveLoanModalLabel">Approve Loan</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
@@ -439,6 +449,38 @@
 
                 </form>
                 <!-- Form end | Loan approve  -->
+
+                <!-- Form start | Loan transfer  -->
+                <form class="col-md-12" action="{{ route('loan.transfer', ['id' => $loan['id']]) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('POST')
+
+                    <!-- Modal Start  -->
+                    <div class="modal fade" id="transferLoanModal" tabindex="-1" role="dialog" aria-labelledby="transferLoanModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="transferLoanModalLabel">Transfer</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>
+                                    Are you sure you have Transferred the Loan to the Client? 
+                                </h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="submit" class="btn btn-secondary">{{ __('Transfer') }}</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <!-- Modal End-->
+
+                </form>
+                <!-- Form end | Loan transfer  -->
 
 
                 <!-- Form start | Pay loan detail -->
@@ -509,7 +551,7 @@
                                             </td>
                                             <td class="text-left">
                                                 <div class="form-group">
-                                                    <input type="text" name="amount_payed" class="form-control" placeholder="0.00" value="0.00" required>
+                                                    <input type="text" name="amount_payed" class="form-control" placeholder="0.00" value="0.00" @if($loan->is_settled) disabled @else required @endif>
                                                     <input name="loan_id" type="hidden" value="{{ $loan->id }}">
                                                 </div>
                                             </td>
@@ -546,6 +588,74 @@
 
                 </form>
                 <!-- Form end | Pay loan detail  -->
+
+                <!-- Form start | Create Penalty -->
+                <form id="loan_create_penalty_form" class="col-md-12" action="{{ route('loan.detail.add_penalty', ['id' => $detail->id]) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('POST')
+
+                    <!-- Modal Start  -->
+                    <div class="modal fade" id="createPenaltyDetailModal" tabindex="-1" role="dialog" aria-labelledby="createPenaltyDetailModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createPenaltyDetailModalLabel">Loan : {{ $loan->id }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Line Details</h5>
+                                <!-- table start -->
+                                <table class="table">
+                                    
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-right">
+                                                Type: 
+                                            </td>
+                                            <td class="text-left" id="loan_line_type">
+                                                Penalty
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">
+                                                Due:
+                                            </td>
+                                            <td class="text-left" id="loan_detail_date_due">
+                                                <div class="form-group">
+                                                    <input type="date" name="date_payment_due" class="form-control" placeholder="Date Loan" value="{{ date('Y-m-d') }}" required>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">
+                                                Penalty Amount:
+                                            </td>
+                                            <td class="text-left">
+                                                <div class="form-group">
+                                                    <input type="text" name="amount_due" class="form-control" placeholder="0.00" value="{{ $loan->amount * ($loan->percent_penalty / 100)  }}" @if($loan->is_settled) disabled @else required @endif>
+                                                    <input name="loan_id" type="hidden" value="{{ $loan->id }}">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                                <!-- table end -->
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-secondary">{{ __('Add') }}</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <!-- Modal End-->
+
+                </form>
+                <!-- Form end | Create Penalty  -->
 
             </div>
         </div>

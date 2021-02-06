@@ -36,6 +36,15 @@
                                     </button>
                                 </div>
                             @endif
+
+                            @if (Session::has('error_message'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> {{ Session::get('error_message') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
                             
                             <div class="row">
                                 <label class="col-md-2 col-form-label">{{ __('ID') }}</label>
@@ -136,17 +145,24 @@
                         <div class="card-footer ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
-        
+                                    @if(Helper::canUpdateRecords())
+                                        <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
+
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#deleteBorrowerModal">
+                                            Delete
+                                        </button>
+                                        <!-- Button trigger modal -->
+                                    @endif
+
+                                    <a href="{{ route('borrower.loans', ['borrower_id' => $borrower['id']]) }}" class="btn btn-info btn-round">
+                                        Loans
+                                    </a>
+
                                     <a href="{{ route('borrower.index') }}" class="btn btn-info btn-round">
                                         Cancel
                                     </a>
 
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#deleteBorrowerModal">
-                                        Delete
-                                    </button>
-                                    <!-- Button trigger modal -->
 
                                     <br><br>
                                 </div>

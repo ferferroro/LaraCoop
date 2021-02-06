@@ -1,6 +1,6 @@
 @extends('layouts.app', [
     'class' => '',
-    'elementActive' => 'loans'
+    'elementActive' => 'borrowers'
 ])
 
 @section('content')
@@ -12,22 +12,19 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-12">
-                                <form action="{{ route('loan.index') }}" method="GET" enctype="multipart/form-data">
-                                    @csrf
-                                    @method('GET')
+                                <form action="{{ route('member.contributions') }}" method="GET" enctype="multipart/form-data">
+                                    <!-- @csrf
+                                    @method('GET') -->
                                     <div class="form-group">
-                                        <h3 class="mb-0">Loans</h3>
+                                        <h3 class="mb-0">{{ $borrower->name ?? '' }}'s Loans</h3>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="search_string" class="form-control" id="searchLoan" aria-describedby="searchLoanHelp" placeholder="Search" value="{{ $search_string ?? '' }}">
+                                        <input type="text" name="search_string" class="form-control" id="searchString" aria-describedby="searchStringHelp" placeholder="Search" value="{{ $search_string ?? '' }}">
+                                        <input type="hidden" name="borrower_id" class="form-control" id="searchMember" aria-describedby="searchMemberHelp" placeholder="Search" value="{{ $borrower->id ?? '' }}">
                                     </div>
 
                                     <div class="form-group text-right">
                                         <button type="submit" class="btn btn-primary">Search</button>
-                                        
-                                        <a href="{{ route('loan.create') }}" class="btn btn-primary btn-md">
-                                            &nbsp; Add &nbsp;
-                                        </a>
                                     </div>
                                 </form>
                             </div>
@@ -42,13 +39,21 @@
                                 </button>
                             </div>
                         @endif
+
+                        @if (Session::has('error_message'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong> {{ Session::get('error_message') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                     
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th> Loan ID </th>
-                                        <!-- <th> Borrower ID </th> -->
                                         <th> Name </th>
                                         <th> Type </th>
                                         <th> Start </th>
@@ -61,7 +66,7 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($loans as $loan)
+                                    @foreach ($borrower_loans as $loan)
                                        
                                         <tr>
                                             <td>
@@ -71,7 +76,7 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('borrower.edit', ['id' => $loan->borrower_id]) }}" >
-                                                    {{ $loan->borrower->name }}
+                                                    {{ $borrower->name }}
                                                 </a>
                                                 
                                             </td>
@@ -102,16 +107,29 @@
 
                                     
                                 </tbody>
-                                
+                                    
                             </table>
                         </div>
 
                         
                         <div>
                             <br>
-                            {{ $loans->links() }}
+                            {{ $borrower_loans->links() }}
                         </div>
 
+                    </div>
+
+                    <div class="card-footer ">
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+
+                                <a href="{{ route('borrower.edit', ['id' => $borrower->id]) }}" class="btn btn-info btn-round">
+                                    Cancel
+                                </a>
+
+                                <br><br>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

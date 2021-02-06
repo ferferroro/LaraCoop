@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use App\{Menu, UserMenu};
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class Helper
 {
@@ -84,5 +85,61 @@ class Helper
         $user = Auth::user();
 
         return $user->can_approve_contributions;
+    }
+
+    public static function canApproveLoans()
+    {
+        $user = Auth::user();
+
+        return $user->can_approve_loans;
+    }
+
+    public static function canTransferFunds()
+    {
+        $user = Auth::user();
+
+        return $user->can_transfer_funds;
+    }
+
+    public static function isMasterAccount()
+    {
+        $user = Auth::user();
+
+        return $user->is_master_account;
+    }
+
+    public static function incrementDate($day, $date, $interval)
+    {
+
+      $newDate = date('Y-m-d', strtotime($date));
+      $newDate = Carbon::create($newDate);
+      
+      switch ($interval) {
+                    
+        case "Monthly":
+
+            $newDate->addMonth(1);
+
+            // new date has been computed
+            // anything that will fall into this is either a month has no 29, has no 30, and has no 31
+            if ($day = date('d', strtotime($newDate)) != $day  ) {
+
+                // subtract any day to bring it back to previous month
+                $newDate->addDays(-10);
+
+                // get the last day of the month
+                $newDate = date('Y-m-t', strtotime($newDate)); 
+            }
+
+            break;
+        case "Semi-Monthly":
+            $newDate->addDays(15);
+            break;
+        default:
+            return 'Error!';
+
+      }
+
+      return $newDate;
     }
 }

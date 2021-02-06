@@ -8,6 +8,7 @@ use App\{Company, Loan, LoanDetail};
 use Illuminate\Validation\Rule;
 use Session;
 use Carbon\Carbon;
+use App\Helper\Helper;
 
 class LoanController extends Controller
 {
@@ -88,15 +89,17 @@ class LoanController extends Controller
         try {
             $loan = new Loan;
             $loan->fill($validated);
-            $loan->search_text = "$loan->borrower_id $loan->loan_type $loan->date_loan $loan->date_start $loan->date_end $loan->terms $loan->type_schedule $loan->amount $loan->percent_interest $loan->percent_penaly $loan->member_id $loan->remarks";
             $loan->save();
             $loan->refresh();
 
             $loan_detail_payment_due = Carbon::create($loan->date_start);
-            // return $loan_detail_payment_due;
-
+            $day = date('d', strtotime($loan_detail_payment_due)); 
+            
             // create the loan details based on terms
-            for ($term = 1; $term <= $loan->terms; $term++) {
+            $term = 0;
+            while($term < $loan->terms) {
+
+                $term++;
                 
                 $loan_detail = new LoanDetail;
                 $loan_detail->loan_id = $loan->id;
@@ -108,20 +111,9 @@ class LoanController extends Controller
                 $loan_detail->interest_amount = ($loan->percent_interest / 100) * $loan_detail->amount_base;
                 $loan_detail->amount_due = $loan_detail->amount_base + $loan_detail->interest_amount;
                 
-                switch ($loan->type_schedule) {
-                    
-                    case "Monthly":
-                        $loan_detail_payment_due->addDays(30);
-                        break;
-                    case "Semi-Monthly":
-                        $loan_detail_payment_due->addDays(15);
-                        break;
-                    default:
-                        return 'Error!';
-
-                }
-
                 $loan_detail->save();
+
+                $loan_detail_payment_due = Helper::incrementDate($day, $loan_detail_payment_due, $loan->type_schedule);
             }
 
             $loan->date_end = $loan_detail_payment_due;
@@ -135,7 +127,8 @@ class LoanController extends Controller
 
         Session::flash('success_message', "Loan has been added!");
 
-        return redirect()->route('loan.index');
+        // return redirect()->route('loan.index');
+        return redirect()->route('loan.edit', ['id' => $loan->id]);
     }
 
     /**
@@ -174,20 +167,11 @@ class LoanController extends Controller
             'delete' => true
         ];
 
-        if ($loan->is_approved || $loan->is_settled) {
-            $show_button['approve'] = false;
-            $show_button['save'] = false;
-            $show_button['delete'] = false;
-            $show_button['penalty'] = ($loan->is_approved && !$loan->is_settled);
-            $show_button['settle'] = !$loan->is_settled;
-        }
-
         return view('pages.loan_edit')
             ->with('loan',  $loan)
             ->with('members', $members)
             ->with('borrowers', $borrowers)
-            ->with('company', $company)
-            ->with('show_button', $show_button);
+            ->with('company', $company);
     }
 
     /**
@@ -225,8 +209,8 @@ class LoanController extends Controller
         $loan = Loan::findOrFail($loan_id);
 
         // should not happen - but trap it incase
-        if ($loan->is_approved || $loan->is_settled) {
-            Session::flash('error_message', "Unable to make changes to Approved or Settled Loan!");
+        if ($loan->is_approved || $loan->is_settled || $loan->is_transferred) {
+            Session::flash('error_message', "Unable to make changes to Approved, Settled Loan or Transferred!");
             return redirect()->route('loan.edit', ['id' => $loan_id]);
         }
         
@@ -234,11 +218,11 @@ class LoanController extends Controller
         try {
             
             $loan->fill($validated);
-            $loan->search_text = "$loan->borrower_id $loan->loan_type $loan->date_loan $loan->date_start $loan->date_end $loan->terms $loan->type_schedule $loan->amount $loan->percent_interest $loan->percent_penaly $loan->member_id $loan->remarks";
             $loan->save();
             $loan->refresh();
 
             $loan_detail_payment_due = Carbon::create($loan->date_start);
+            $day = date('d', strtotime($loan_detail_payment_due)); 
             
             // delete and recreate new loan lines
             $loan->loan_details()->delete();
@@ -255,20 +239,9 @@ class LoanController extends Controller
                 $loan_detail->amount_base = $loan->amount / $loan->terms;
                 $loan_detail->interest_amount = ($loan->percent_interest / 100) * $loan_detail->amount_base;
                 $loan_detail->amount_due = $loan_detail->amount_base + $loan_detail->interest_amount;
-
-                
-                switch ($loan->type_schedule) {
-                    case "Monthly":
-                        $loan_detail_payment_due->addDays(30);
-                        break;
-                    case "Semi-Monthly":
-                        $loan_detail_payment_due->addDays(15);
-                        break;
-                    default:
-                        return 'Error!';
-                } 
-
                 $loan_detail->save();
+
+                $loan_detail_payment_due = Helper::incrementDate($day, $loan_detail_payment_due, $loan->type_schedule);
             }
 
             $loan->date_end = $loan_detail_payment_due;
@@ -298,6 +271,13 @@ class LoanController extends Controller
             // find the record and delete it
             $loan_id = $request['id'] ?? 0;
             $loan = Loan::findOrFail($loan_id);
+
+            // should not happen - but trap it incase
+            if ($loan->is_approved || $loan->is_settled || $loan->is_transferred) {
+                Session::flash('error_message', "Unable to delete record that is Approved, Settled Loan or Transferred!");
+                return redirect()->route('loan.edit', ['id' => $loan_id]);
+            }
+            
             $loan->delete();
             $loan->loan_details()->delete();
 
@@ -316,9 +296,6 @@ class LoanController extends Controller
 
     /**
      * Approve loan
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function approve(Request $request)
     {
@@ -327,6 +304,24 @@ class LoanController extends Controller
         $loan_id = $request['id'] ?? 0;
         $loan = Loan::lockForUpdate()
             ->findOrFail($loan_id);
+
+        // check if okay to proceed
+        if ($loan->is_approved) {
+            Session::flash('error_message', "Loan is already marked as approved!");
+            return redirect()->route('loan.edit', ['id' => $loan_id]);
+        }
+
+        // check if okay to proceed
+        if ($loan->is_settled) {
+            Session::flash('error_message', "This is a settled Loan");
+            return redirect()->route('loan.edit', ['id' => $loan_id]);
+        }
+
+        // check if okay to proceed
+        if ($loan->is_transferred) {
+            Session::flash('error_message', "The money has been transferred to the client!");
+            return redirect()->route('loan.edit', ['id' => $loan_id]);
+        }
 
         // Check if company has enough fund
         if ($loan->loan_details_total() > $company->fund_available) {
@@ -339,10 +334,15 @@ class LoanController extends Controller
             $loan->is_approved = true;
             $loan->save();
 
-            $company->fund_total += $loan->loan_details_total();
-            $company->fund_lended += $loan->loan_details_total();
+            // $company->fund_total += $loan->loan_details_total();
+            // $company->fund_lended += $loan->loan_details_total();
+            // $company->fund_available -= $loan->loan_details_total();
+            // $company->fund_profit += $loan->loan_details_total_interest();
+            // $company->save();
+
+            
             $company->fund_available -= $loan->loan_details_total();
-            $company->fund_profit += $loan->loan_details_total_interest();
+            $company->fund_reserved += $loan->loan_details_total();
             $company->save();
 
             DB::commit();
@@ -354,7 +354,70 @@ class LoanController extends Controller
         // create success message 
         Session::flash('success_message', "Loan ID [' $loan_id '] has been approved!");
 
-        // go back to the index page
-        return redirect()->route('loan.index');
+        return redirect()->route('loan.edit', ['id' => $loan_id]);
+    }
+
+    /**
+     * Transfer loan
+     */
+    public function transfer(Request $request)
+    {
+        $company = Company::lockForUpdate()
+            ->firstOrFail();
+        $loan_id = $request['id'] ?? 0;
+        $loan = Loan::lockForUpdate()
+            ->findOrFail($loan_id);
+
+        // check if okay to proceed
+        if ($loan->is_approved == false) {
+            Session::flash('error_message', "Please approve the loan first!");
+            return redirect()->route('loan.edit', ['id' => $loan_id]);
+        }
+
+        // check if okay to proceed
+        if ($loan->is_settled) {
+            Session::flash('error_message', "This is a settled Loan!");
+            return redirect()->route('loan.edit', ['id' => $loan_id]);
+        }
+
+        // check if okay to proceed
+        if ($loan->is_transferred) {
+            Session::flash('error_message', "Loan is already marked as Transferred!");
+            return redirect()->route('loan.edit', ['id' => $loan_id]);
+        }
+
+        // Check if company has enough fund
+        if ($loan->loan_details_total() > $company->fund_reserved) {
+            Session::flash('error_message', "Company does not have reserved fund!");
+            return redirect()->route('loan.edit', ['id' => $loan_id]);
+        }
+
+        DB::beginTransaction();
+        try {
+            $loan->is_transferred = true;
+            $loan->lockForUpdate();
+            $loan->save();
+
+            $company->fund_total += $loan->loan_details_total();
+            $company->fund_lended += $loan->loan_details_total();
+            $company->fund_profit += $loan->loan_details_total_interest();
+            $company->fund_reserved -= $loan->loan_details_total();
+            $company->lockForUpdate();
+            $company->save();
+
+            $loan->borrower->balance = $loan->loan_details_total();
+            $loan->borrower->lockForUpdate();
+            $loan->borrower->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        // create success message 
+        Session::flash('success_message', "Loan ID [' $loan_id '] has been marked as Transferred!");
+
+        return redirect()->route('loan.edit', ['id' => $loan_id]); 
     }
 }

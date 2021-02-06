@@ -31,9 +31,9 @@
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <select name="borrower_id" class="form-control" id="borrower_id" onchange="borrower_id_selected_on_add_loan()">
-                                        <option value="">Select Borrower</option>
+                                        <option value="" >Select Borrower</option>
                                             @foreach ($borrowers as $borrower)
-                                                <option value="{{ $borrower->id }}"> {{ $borrower->id }}  - {{ $borrower->name }}</option>
+                                                <option value="{{ $borrower->id }}" @if(old('borrower_id') == $borrower->id) selected @endif> {{ $borrower->id }}  - {{ $borrower->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -48,8 +48,8 @@
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <select name="loan_type" class="form-control" id="loan_type">
-                                            <option value="Loan">Loan</option>
-                                            <option value="Quote">Quote</option>
+                                            <option value="Loan"  @if(old('loan_type') == 'Loan') selected @endif>Loan</option>
+                                            <option value="Quote"  @if(old('loan_type') == 'Quote') selected @endif>Quote</option>
                                         </select>
                                     </div>
                                     @if ($errors->has('loan_type'))
@@ -62,7 +62,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Date Loan') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="date" name="date_loan" class="form-control" placeholder="Date Loan" value="<?php echo date('Y-m-d'); ?>" required>
+                                        <input type="date" name="date_loan" class="form-control" placeholder="Date Loan" value="{{ old('date_loan') ?? date('Y-m-d') }}" required>
                                     </div>
                                     @if ($errors->has('date_loan'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -74,7 +74,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Date Start') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="date" name="date_start" class="form-control" placeholder="Date Start" value="<?php echo date('Y-m-d'); ?>" required>
+                                        <input type="date" name="date_start" class="form-control" placeholder="Date Start" value="{{ old('date_start') ?? date('Y-m-d') }}" required>
                                     </div>
                                     @if ($errors->has('date_start'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -87,7 +87,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Terms') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="terms" class="form-control" placeholder="0.00" value="1" required>
+                                        <input type="text" name="terms" class="form-control" placeholder="0.00" value="{{ old('terms') ?? 1 }}" required>
                                     </div>
                                     @if ($errors->has('terms'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -100,8 +100,8 @@
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <select name="type_schedule" class="form-control" id="type_schedule">
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Semi-Monthly">Semi-Monthly</option>
+                                            <option value="Monthly" @if(old('type_schedule') == 'Monthly') selected @endif>Monthly</option>
+                                            <option value="Semi-Monthly" @if(old('type_schedule') == 'Semi-Monthly') selected @endif>Semi-Monthly</option>
                                         </select>
                                     </div>
                                     @if ($errors->has('type_schedule'))
@@ -114,7 +114,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Amount') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="amount" class="form-control" placeholder="0.00" value="" required>
+                                        <input type="text" name="amount" class="form-control" placeholder="0.00" value="{{ old('amount') ?? '0.00' }}" required>
                                     </div>
                                     @if ($errors->has('amount'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -126,7 +126,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Interest Percentage') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="percent_interest" class="form-control" placeholder="0.00" value="{{ $company->percent_interest }}" id="percent_interest" required>
+                                        <input type="text" name="percent_interest" class="form-control" placeholder="0.00" value="{{ old('percent_interest') ?? $company->percent_interest }}" id="percent_interest" required>
                                     </div>
                                     @if ($errors->has('percent_interest'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -138,7 +138,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Penalty Percentage') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="percent_penalty" class="form-control" placeholder="0.00" value="{{ $company->percent_penalty }}" id="percent_penalty" required>
+                                        <input type="text" name="percent_penalty" class="form-control" placeholder="0.00" value="{{ old('percent_penalty') ?? $company->percent_penalty }}" id="percent_penalty" required>
                                     </div>
                                     @if ($errors->has('percent_penalty'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -152,7 +152,7 @@
                                     <div class="form-group">
                                         <select name="member_id" class="form-control" id="member_id">
                                             @foreach ($members as $member)
-                                                <option value="{{ $member->id }}"> {{ $member->id }}  - {{ $member->name }}</option>
+                                                <option value="{{ $member->id }}"  @if(old('member_id') == $member->id) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
                                                 
                                             @endforeach
                                         </select>
@@ -167,7 +167,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Remarks') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="remarks" class="form-control" placeholder="Remarks" value="" required>
+                                        <input type="text" name="remarks" class="form-control" placeholder="Remarks" value="{{ old('remarks') ?? '' }}">
                                     </div>
                                     @if ($errors->has('remarks'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
@@ -176,9 +176,6 @@
                                     @endif
                                 </div>
 
-                                                            
-
-                                
                             </div>
                             
                         </div>
