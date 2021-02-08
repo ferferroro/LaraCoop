@@ -1,3 +1,17 @@
+$.ajax({
+  type:'GET',
+  url: "/home/loan_chart_data/",
+  dataType: 'json',
+  data:{"id":1},
+  success:function(data) {
+    loans = data.loans;
+    quotes = data.quotes;
+    loan_by_status = data.loan_by_status;
+    contributions = data.contributions;
+  }
+});
+
+
 demo = {
   initPickColor: function() {
     $('.pick-class-label').click(function() {
@@ -107,20 +121,32 @@ demo = {
   initChartsPages: function() {
     chartColor = "#FFFFFF";
 
-    ctx = document.getElementById('chartHours').getContext("2d");
-
+    ctx = document.getElementById('chartHours').getContext("2d");    
+    
     myChart = new Chart(ctx, {
       type: 'line',
-
       data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
-        datasets: [{
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [
+          {
             borderColor: "#6bd098",
             backgroundColor: "#6bd098",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
-            data: [300, 310, 316, 322, 330, 326, 333, 345, 338, 354]
+            data: [ loans[1], 
+                    loans[2], 
+                    loans[3], 
+                    loans[4], 
+                    loans[5], 
+                    loans[6], 
+                    loans[7], 
+                    loans[8], 
+                    loans[9], 
+                    loans[10], 
+                    loans[11], 
+                    loans[12]
+                  ]
           },
           {
             borderColor: "#f17e5d",
@@ -128,16 +154,28 @@ demo = {
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
-            data: [320, 340, 365, 360, 370, 385, 390, 384, 408, 420]
+            data: [ quotes[1], 
+                    quotes[2], 
+                    quotes[3], 
+                    quotes[4], 
+                    quotes[5], 
+                    quotes[6], 
+                    quotes[7], 
+                    quotes[8], 
+                    quotes[9], 
+                    quotes[10], 
+                    quotes[11], 
+                    quotes[12]
+                  ]
           },
-          {
-            borderColor: "#fcc468",
-            backgroundColor: "#fcc468",
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            borderWidth: 3,
-            data: [370, 394, 415, 409, 425, 445, 460, 450, 478, 484]
-          }
+          // {
+          //   borderColor: "#fcc468",
+          //   backgroundColor: "#fcc468",
+          //   pointRadius: 0,
+          //   pointHoverRadius: 0,
+          //   borderWidth: 3,
+          //   data: [370, 394, 415, 409, 425, 445, 460, 450, 478, 0, 400]
+          // }
         ]
       },
       options: {
@@ -201,7 +239,12 @@ demo = {
             '#ef8157'
           ],
           borderWidth: 0,
-          data: [342, 480, 530, 120]
+          data: [
+            loan_by_status[1], 
+            loan_by_status[2],
+            loan_by_status[3], 
+            loan_by_status[4], 
+            ]
         }]
       },
 
@@ -253,7 +296,20 @@ demo = {
     var speedCanvas = document.getElementById("speedChart");
 
     var dataFirst = {
-      data: [0, 19, 15, 20, 30, 40, 40, 50, 25, 30, 50, 70],
+      data: [
+        contributions[1], 
+        contributions[2], 
+        contributions[3], 
+        contributions[4], 
+        contributions[5], 
+        contributions[6], 
+        contributions[7], 
+        contributions[8], 
+        contributions[9], 
+        contributions[10], 
+        contributions[11], 
+        contributions[12]
+      ],
       fill: false,
       borderColor: '#fbc658',
       backgroundColor: 'transparent',
@@ -263,20 +319,9 @@ demo = {
       pointBorderWidth: 8,
     };
 
-    var dataSecond = {
-      data: [0, 5, 10, 12, 20, 27, 30, 34, 42, 45, 55, 63],
-      fill: false,
-      borderColor: '#51CACF',
-      backgroundColor: 'transparent',
-      pointBorderColor: '#51CACF',
-      pointRadius: 4,
-      pointHoverRadius: 4,
-      pointBorderWidth: 8
-    };
-
     var speedData = {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      datasets: [dataFirst, dataSecond]
+      datasets: [dataFirst]
     };
 
     var chartOptions = {

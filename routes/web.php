@@ -30,6 +30,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
+	// Home routes
+	Route::group(['prefix' => 'home'], function ($router) {
+		Route::get('loan_chart_data', 'HomeController@loan_chart_data')->name('home.loan_chart_data');
+	});
+
 	// Menu routes
 	Route::group(['prefix' => 'menu'], function ($router) {
 		Route::post('setup', 'MenuController@setup')->name('menu.setup');
