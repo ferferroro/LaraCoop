@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\{Loan};
+use App\Helper\Helper;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        if (! Helper::hasMenu() ) {
+            return redirect()->route('menu.setup_view');
+        }
+        
         $company = DB::table('company')->first();
 
         return view('pages.dashboard')
