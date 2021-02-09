@@ -125,7 +125,8 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('store', 'SystemUserController@store')->name('system_user.store');
 		Route::get('edit', 'SystemUserController@edit')->name('system_user.edit');
 		Route::post('update', 'SystemUserController@update')->name('system_user.update');
-		// Route::post('destroy', 'SystemUserController@destroy')->name('system_user.destroy');
+		Route::put('update_side_bg_color', 'SystemUserController@update_side_bg_color')->name('system_user.update_side_bg_color');
+		Route::put('update_side_active_color', 'SystemUserController@update_side_active_color')->name('system_user.update_side_active_color');
 	});
 
 	// Transfer Funds

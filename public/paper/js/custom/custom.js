@@ -44,3 +44,82 @@ $('#payLoanDetailModal').on('show.bs.modal', function (event) {
    $('#loan_detail_amount_payed').html(loan_detail_amount_payed)
    $('#loan_detail_pay_form').attr('action', data_loan_detail_pay_form_action);
 });
+
+function update_side_bg_color_on_change_of_bg_color() {
+   alert(
+      $(this).html()
+      );
+   $.ajax({
+      type:'PUT',
+      url: "/system_user/update_side_bg_color/",
+      data:{
+      "_token": $('#fixed_plugin_token').val(),
+      "color": "asdf",
+      // "color": $(this).data('color'),
+      // "color2": $(this).val()
+     },
+      success:function(data) {
+         // document.getElementById("amount").value = data.monthly_contribution;
+         console.log(data);
+      }
+   });
+}
+
+$('#change_bg_to_white').on('click',function(){  
+   call_update_side_bg_color($(this).data('color'));
+});
+
+$('#change_bg_to_black').on('click',function(){  
+   call_update_side_bg_color($(this).data('color'));
+});
+
+function call_update_side_bg_color(color) 
+{ 
+   $.ajax({
+      type:'PUT',
+      url: "/system_user/update_side_bg_color/",
+      data:{
+      "_token": $('#fixed_plugin_token').val(),
+      "side_bg_color": color
+     },
+      success:function(data) {
+         console.log(data);
+      }
+   });
+}
+
+$('#change_txt_to_primary').on('click',function(){  
+   call_side_active_color($(this).data('color'));
+});
+
+$('#change_txt_to_info').on('click',function(){  
+   call_side_active_color($(this).data('color'));
+});
+
+$('#change_txt_to_success').on('click',function(){  
+   call_side_active_color($(this).data('color'));
+});
+
+$('#change_txt_to_warning').on('click',function(){  
+   call_side_active_color($(this).data('color'));
+});
+
+$('#change_txt_to_danger').on('click',function(){  
+   call_side_active_color($(this).data('color'));
+});
+
+
+function call_side_active_color(color) 
+{ 
+   $.ajax({
+      type:'PUT',
+      url: "/system_user/update_side_active_color/",
+      data:{
+      "_token": $('#fixed_plugin_token').val(),
+      "side_active_color": color
+     },
+      success:function(data) {
+         console.log(data);
+      }
+   });
+}

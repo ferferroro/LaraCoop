@@ -1,4 +1,4 @@
-<div class="sidebar" data-color="white" data-active-color="danger">
+<div class="sidebar" data-color="{{ Auth::user()->side_bg_color ?? 'white' }}" data-active-color="{{ Auth::user()->side_active_color ?? 'danger' }}">
     <div class="logo">
         <a href="{{ route('page.index', 'dashboard') }}" class="simple-text logo-mini">
             <div class="logo-image-small">

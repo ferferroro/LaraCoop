@@ -238,13 +238,50 @@ class SystemUserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * update side_bg_color
      */
-    public function destroy($id)
+    public function update_side_bg_color(Request $request)
     {
-        //
+        $system_user = SystemUser::findOrFail(Auth::id());
+        $new_color = $request['side_bg_color'] ?? 'white';
+
+        DB::beginTransaction();
+        try {
+            if ($new_color != $system_user->side_bg_color) {
+                $system_user->side_bg_color = $new_color;
+                $system_user->lockForUpdate();
+                $system_user->save();
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $new_color;
+    }
+
+    /**
+     * update side_active_color
+     */
+    public function update_side_active_color(Request $request)
+    {
+        $system_user = SystemUser::findOrFail(Auth::id());
+        $new_color = $request['side_active_color'] ?? 'danger';
+
+        DB::beginTransaction();
+        try {
+            if ($new_color != $system_user->side_active_color) {
+                $system_user->side_active_color = $new_color;
+                $system_user->lockForUpdate();
+                $system_user->save();
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $new_color;
     }
 }

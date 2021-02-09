@@ -119,6 +119,9 @@
             $(this).siblings().removeClass('active');
             $(this).addClass('active');
             var new_color = $(this).data('color');
+
+            // here save it
+            // console.log(new_color);
             if ($sidebar.length != 0) {
                 $sidebar.attr('data-color', new_color);
             }
