@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Company;
+use App\{Company, CompanyAdjustment};
 use Session;
 
 class CompanyController extends Controller
@@ -100,12 +100,98 @@ class CompanyController extends Controller
             'vision' => 'required|string|max:255',
         ]);
 
-        $company_id = $request['id'] ?? 0;
-        $company = Company::firstOrFail();
+        
+        DB::beginTransaction();
+        try {
+            $company_id = $request['id'] ?? 0;
+            $company = Company::firstOrFail();
 
-        $company->fill($validated);
-        $company->search_text = "$company->name $company->address $company->primary_contact $company->interest_rate $company->penalty_rate $company->fund_total $company->fund_lended $company->fund_available $company->fund_profit $company->date_founded $company->mission $company->vission";
-        $company->save();
+
+            // log adjustments
+            if ($company->percent_interest != $validated['percent_interest']) {
+                $company_adj = new CompanyAdjustment;
+                $company_adj->company_id = $company->id;
+                $company_adj->type = 'percent_interest';
+                $company_adj->amount_from = $company->percent_interest;
+                $company_adj->amount_to = $validated['percent_interest'];
+                $company_adj->variance = $company->percent_interest - $validated['percent_interest'];
+                $company_adj->save();
+            }
+
+            // log adjustments
+            if ($company->percent_penalty != $validated['percent_penalty']) {
+                $company_adj = new CompanyAdjustment;
+                $company_adj->company_id = $company->id;
+                $company_adj->type = 'percent_penalty';
+                $company_adj->amount_from = $company->percent_penalty;
+                $company_adj->amount_to = $validated['percent_penalty'];
+                $company_adj->variance = $company->percent_penalty - $validated['percent_penalty'];
+                $company_adj->save();
+            }
+
+            // log adjustments
+            if ($company->fund_total != $validated['fund_total']) {
+                $company_adj = new CompanyAdjustment;
+                $company_adj->company_id = $company->id;
+                $company_adj->type = 'fund_total';
+                $company_adj->amount_from = $company->fund_total;
+                $company_adj->amount_to = $validated['fund_total'];
+                $company_adj->variance = $company->fund_total - $validated['fund_total'];
+                $company_adj->save();
+            }
+
+            // log adjustments
+            if ($company->fund_available != $validated['fund_available']) {
+                $company_adj = new CompanyAdjustment;
+                $company_adj->company_id = $company->id;
+                $company_adj->type = 'fund_available';
+                $company_adj->amount_from = $company->fund_available;
+                $company_adj->amount_to = $validated['fund_available'];
+                $company_adj->variance = $company->fund_available - $validated['fund_available'];
+                $company_adj->save();
+            }
+
+            // log adjustments
+            if ($company->fund_lended != $validated['fund_lended']) {
+                $company_adj = new CompanyAdjustment;
+                $company_adj->company_id = $company->id;
+                $company_adj->type = 'fund_lended';
+                $company_adj->amount_from = $company->fund_lended;
+                $company_adj->amount_to = $validated['fund_lended'];
+                $company_adj->variance = $company->fund_lended - $validated['fund_lended'];
+                $company_adj->save();
+            }
+
+            // log adjustments
+            if ($company->fund_profit != $validated['fund_profit']) {
+                $company_adj = new CompanyAdjustment;
+                $company_adj->company_id = $company->id;
+                $company_adj->type = 'fund_profit';
+                $company_adj->amount_from = $company->fund_profit;
+                $company_adj->amount_to = $validated['fund_profit'];
+                $company_adj->variance = $company->fund_profit - $validated['fund_profit'];
+                $company_adj->save();
+            }
+
+            // log adjustments
+            if ($company->fund_reserved != $validated['fund_reserved']) {
+                $company_adj = new CompanyAdjustment;
+                $company_adj->company_id = $company->id;
+                $company_adj->type = 'fund_reserved';
+                $company_adj->amount_from = $company->fund_reserved;
+                $company_adj->amount_to = $validated['fund_reserved'];
+                $company_adj->variance = $company->fund_reserved - $validated['fund_reserved'];
+                $company_adj->save();
+            }
+
+            $company->fill($validated);
+            $company->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
         
         Session::flash('success_message', "Company record has been updated!");
 

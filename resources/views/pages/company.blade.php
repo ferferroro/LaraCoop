@@ -209,6 +209,9 @@
                         <div class="card-footer ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
+                                    <a href="{{ route('company.adjustment') }}" class="btn btn-info btn-round">
+                                        &nbsp; View Adjustments &nbsp;
+                                    </a>
                                     <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
                                     <br><br>
                                 </div>

@@ -79,7 +79,11 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('store', 'CompanyController@store')->name('company.store');
 		Route::get('edit', 'CompanyController@edit')->name('company.edit');
 		Route::post('update', 'CompanyController@update')->name('company.update');
+
+		// company adjustments
+		Route::get('adjustment', 'CompanyAdjustmentController@index')->name('company.adjustment');
 	});
+	
 
 	// Contribution routes
 	Route::group(['prefix' => 'contribution'], function ($router) {
