@@ -19,9 +19,12 @@
                             <br>
 
                             @if (\App\Setups\AppSetup::instance()->setupHasBeenRan())
-                                <a href="{{ route('login') }}" class="btn btn-warning">
-                                    {{ __('Manage your Cooperative') }}
-                                </a>
+                            
+                                @guest
+                                    <a href="{{ route('login') }}" class="btn btn-warning">
+                                        {{ __('Manage your Cooperative') }}
+                                    </a>
+                                @endguest
                             @else
                                 <a href="{{ route('register') }}" class="btn btn-warning">
                                     {{ __('Register Defaults') }}
