@@ -86,7 +86,7 @@
 
                                         <tr>
                                             <td>
-                                            <a href="{{ route('member.contribution_view', ['id' => $member->id]) }}" class="">
+                                            <a href="{{ route('member.edit', ['id' => $member->id]) }}" class="">
                                                 # {{ $member->id }}
                                             </a>
                                                
