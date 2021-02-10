@@ -18,6 +18,7 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navigation">
             <form>
+                Hello {{ Auth::user()->name }}!
                 <!-- <div class="input-group no-border">
                     <input type="text" value="" class="form-control" placeholder="Search...">
                     <div class="input-group-append">
