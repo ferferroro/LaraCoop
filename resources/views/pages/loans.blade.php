@@ -66,35 +66,35 @@
                                         <tr>
                                             <td>
                                                 <a href="{{ route('loan.edit', ['id' => $loan->id]) }}" >
-                                                    # {{ $loan->id }}
+                                                    # {{ $loan->id ?? '' }}
                                                 </a>
                                             </td>
                                             <td>
                                                 <a href="{{ route('borrower.edit', ['id' => $loan->borrower_id]) }}" >
-                                                    {{ $loan->borrower->name }}
+                                                    {{ $loan->borrower->name ?? '' }}
                                                 </a>
                                                 
                                             </td>
                                             <td>
-                                                {{ $loan->loan_type }}
+                                                {{ $loan->loan_type ?? '' }}
                                             </td>
                                             <td>
-                                                {{ $loan->date_start }}
+                                                {{ $loan->date_start ?? '' }}
                                             </td>
                                             <td>
-                                                {{ $loan->date_end }}
+                                                {{ $loan->date_end ?? '' }}
                                             </td>
                                             <td>
-                                                {{ $loan->terms }}
+                                                {{ $loan->terms ?? '' }}
                                             </td>
                                             <td>
-                                                {{ $loan->type_schedule }}
+                                                {{ $loan->type_schedule ?? '' }}
                                             </td>    
                                             <td>
                                                 {{ $loan->is_settled ? 'Yes' : 'No' }}
                                             </td>
                                             <td>
-                                                {{ $loan->amount }}
+                                                {{ $loan->amount ?? '' }}
                                             </td>
                                         </tr>
                                         
