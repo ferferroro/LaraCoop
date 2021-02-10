@@ -27,11 +27,24 @@ class BorrowerController extends Controller
      */
     public function index(Request $request)
     {
+
         $search_string = $request['search_string'] ?? '';
+
+        // initilize query
+        $borrowers = (new Borrower)->newQuery();
+        $user = Auth::user();
+
+        // initialize null match these arrays
+        $match_these = [];
+        $match_these[] =  [ 'search_text', 'like' , '%'. $search_string .'%' ];
         
-        $borrowers = DB::table('borrowers')
-                ->where('search_text', 'like', '%' . $search_string . '%' )
-                ->paginate(15);
+        if($user->can_view_other_records == false) {
+            $match_these[] =  [ 'id', '=' , $user->borrower_id ];
+        }
+
+        // add where clause
+        $borrowers = $borrowers->where($match_these);
+        $borrowers = $borrowers->paginate(15);
 
         return view('pages.borrowers')
             ->with('borrowers',  $borrowers)
