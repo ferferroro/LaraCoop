@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('destroy', 'BorrowerController@destroy')->name('borrower.destroy');
 		Route::get('get_borrower', 'BorrowerController@get_borrower')->name('borrower.get_borrower');
 		Route::get('loans', 'BorrowerController@loans')->name('borrower.loans');
+		Route::get('loan_view', 'BorrowerController@loan_view')->name('borrower.loan_view');
 	});
 
 	// Company routes

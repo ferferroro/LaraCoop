@@ -70,7 +70,7 @@
                                        
                                         <tr>
                                             <td>
-                                                <a href="{{ route('loan.edit', ['id' => $loan->id]) }}" >
+                                                <a href="{{ route('borrower.loan_view', ['id' => $loan->id]) }}" >
                                                     # {{ $loan->id }}
                                                 </a>
                                             </td>

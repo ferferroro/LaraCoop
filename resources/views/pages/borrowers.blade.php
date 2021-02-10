@@ -24,10 +24,13 @@
 
                                     <div class="form-group text-right">
                                         <button type="submit" class="btn btn-primary">Search</button>
+
+                                        @if(Helper::canUpdateRecords())
                                         
-                                        <a href="{{ route('borrower.create') }}" class="btn btn-primary btn-md">
-                                            &nbsp; Add &nbsp;
-                                        </a>
+                                            <a href="{{ route('borrower.create') }}" class="btn btn-primary btn-md">
+                                                &nbsp; Add &nbsp;
+                                            </a>
+                                        @endif
                                     </div>
                                 </form>
                             </div>

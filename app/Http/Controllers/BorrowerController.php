@@ -222,5 +222,27 @@ class BorrowerController extends Controller
             ->with('search_string', $search_string);
     }
 
+    /**
+     * Display  borrower's loans detail
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function loan_view(Request $request)
+    {
+        $loan_id = $request['id'] ?? 0;
+
+        $loan = Loan::with('loan_details')
+            ->findOrFail($loan_id);
+
+        $borrowers = DB::table('borrowers')->get();
+        $members = DB::table('members')->get();
+        $company = DB::table('company')->first();
+
+        return view('pages.borrower_loan_view')
+            ->with('loan',  $loan)
+            ->with('members', $members)
+            ->with('borrowers', $borrowers)
+            ->with('company', $company);
+    }
     
 }
