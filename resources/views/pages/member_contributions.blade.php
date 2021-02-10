@@ -67,9 +67,9 @@
                                        
                                         <tr>
                                             <td>
-                                            <a href="{{ route('contribution.edit', ['id' => $contribution->id]) }}" >
-                                                # {{ $contribution->id }}
-                                            </a>
+                                                <a href="{{ route('member.contribution_view', ['id' => $contribution->id]) }}" >
+                                                    # {{ $contribution->id }}
+                                                </a>
                                             <td>
                                                 {{ $contribution->is_approved ? 'Yes' : 'No' }}
                                             </td>

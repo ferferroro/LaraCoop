@@ -235,4 +235,21 @@ class MemberController extends Controller
         // go back to the index page
         return $member;
     }
+
+    /**
+     * Display  member's contribution detail
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function contribution_view(Request $request)
+    {
+        $contribution_id = $request['id'] ?? 0;
+
+        $contribution = Contribution::findOrFail($contribution_id);
+        $members = DB::table('members')->get();
+
+        return view('pages.member_contribution_view')
+            ->with('contribution',  $contribution)
+            ->with('members',  $members);
+    }
 }

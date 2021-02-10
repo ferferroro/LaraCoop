@@ -24,7 +24,7 @@
                     @method('POST')
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="title"> {{ $loan['is_settled'] ? 'View Loan' : 'Maintain Loan' }} </h5>
+                            <h5 class="title"> View Loan </h5>
                         </div>
                         <div class="card-body">
 
