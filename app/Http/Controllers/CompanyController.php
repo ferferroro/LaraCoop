@@ -98,6 +98,8 @@ class CompanyController extends Controller
             'date_founded' => 'required|date',
             'mission' => 'required|string|max:255',
             'vision' => 'required|string|max:255',
+            'bank' => 'required|string|max:255',
+            'account_number' => 'required|string|max:255',
         ]);
 
         

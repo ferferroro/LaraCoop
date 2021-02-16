@@ -69,6 +69,30 @@
                                     @endif
                                 </div>
 
+                                <label class="col-md-2 col-form-label">{{ __('Bank') }}</label>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input type="text" name="bank" class="form-control" placeholder="Bank" value="{{ $company['bank'] ?? '' }}" required>
+                                    </div>
+                                    @if ($errors->has('bank'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('bank') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Account Number') }}</label>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input type="text" name="account_number" class="form-control" placeholder="Account Number" value="{{ $company['account_number'] ?? '' }}" required>
+                                    </div>
+                                    @if ($errors->has('account_number'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('account_number') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
                                 <label class="col-md-2 col-form-label">{{ __('Address') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
