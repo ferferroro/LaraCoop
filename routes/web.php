@@ -59,6 +59,11 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('contributions', 'MemberController@contributions')->name('member.contributions');
 		Route::get('get_member', 'MemberController@get_member')->name('member.get_member');
 		Route::get('contribution_view', 'MemberController@contribution_view')->name('member.contribution_view');
+		Route::get('add_account', 'MemberController@add_account')->name('member.add_account');
+		Route::post('store_account', 'MemberController@store_account')->name('member.store_account');
+		Route::get('edit_account', 'MemberController@edit_account')->name('member.edit_account');
+		Route::post('update_account', 'MemberController@update_account')->name('member.update_account');
+		Route::post('destroy_account', 'MemberController@destroy_account')->name('member.destroy_account');
 	});
 
 	// Borrower routes

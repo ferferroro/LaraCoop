@@ -39,5 +39,13 @@ class Member extends Model
     {
         return $this->hasMany('App\Contribution', 'member_id', 'id');
     }
+
+    /**
+     * Get accounts
+     */
+    public function member_accounts()
+    {
+        return $this->hasMany('App\MemberAccount', 'member_id', 'id');
+    }
     
 }

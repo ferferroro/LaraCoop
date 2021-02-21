@@ -158,6 +158,57 @@
                                 </div> 
 
                             </div>
+
+                            <!-- table start -->
+                            <div class="card card-plain">
+                                <div class="card-header">
+                                    <h4 class="card-title"> Accounts</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead class=" text-primary">
+                                                <th>
+                                                    ID
+                                                </th>
+                                                <th>
+                                                    Bank
+                                                </th>
+                                                <th>
+                                                    Account
+                                                </th>
+                                                <th>
+                                                    Amount
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                @isset($member_accounts)
+                                                    @foreach ($member_accounts as $member_account)
+                                                        <tr>
+                                                            <td>
+                                                                <a href="{{ route('member.edit_account', ['id' => $member_account->id]) }}" >
+                                                                    #{{ $member_account->id }}
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                {{ $member_account->bank }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $member_account->account }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $member_account->amount }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endisset
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- table end -->
                             
                         </div>
                         <div class="card-footer ">
@@ -171,11 +222,17 @@
                                             Delete
                                         </button>
                                         <!-- Button trigger modal -->
+
+                                        <a href="{{ route('member.add_account', ['member_id' => $member['id']]) }}" class="btn btn-info btn-round">
+                                            Add Account
+                                        </a>
                                     @endif
 
                                     <a href="{{ route('member.contributions', ['member_id' => $member['id']]) }}" class="btn btn-info btn-round">
                                         Contributions
                                     </a>
+
+                                    
 
                                     <a href="{{ route('member.index') }}" class="btn btn-info btn-round">
                                         Cancel

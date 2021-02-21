@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Member ,Contribution};
+use App\{Member ,Contribution, MemberAccount};
 use Illuminate\Support\Facades\{DB, Auth};
 use Session;
 
@@ -85,31 +85,11 @@ class MemberController extends Controller
         $member->can_hold_fund = $request->has('can_hold_fund');
         $member->save();
         $member->refresh();
-
-        // get back to members list and show only this record
-        // $members = DB::table('members')
-        //         ->where('id', '=', $member->id )
-        //         ->paginate(15);
-
-        // return view('pages.members')
-        //     ->with('members',  $members)
-        //     ->with('search_string', $member->search_text);
         
         Session::flash('success_message', "Member ID [' $member->id '] has been added!");
 
         return redirect()->route('member.index');
 
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -123,10 +103,12 @@ class MemberController extends Controller
 
         $member_id = $request['id'] ?? 0;
 
-        $member = Member::findOrFail($member_id);
-
+        $member = Member::with('member_accounts')
+            ->findOrFail($member_id);
+        
         return view('pages.member_edit')
-            ->with('member',  $member);
+            ->with('member',  $member)
+            ->with('member_accounts', $member->member_accounts);
 
     }
 
@@ -251,5 +233,103 @@ class MemberController extends Controller
         return view('pages.member_contribution_view')
             ->with('contribution',  $contribution)
             ->with('members',  $members);
+    }
+
+    /**
+     * Add account view
+     */
+    public function add_account(Request $request)
+    {
+        // find the record and delete it
+        $member_id = $request['member_id'] ?? 0;
+        $member = Member::findOrFail($member_id);
+
+        return view('pages.member_account_add')
+            ->with('member', $member);
+    }
+
+    /**
+     * Store account
+     */
+    public function store_account(Request $request)
+    {
+        $validated = $request->validate([
+            'member_id' => 'required|exists:members,id',
+            'bank' => 'required|string|max:255',
+            'account' => 'required|string|max:255'
+        ]);
+
+        $member_account = new MemberAccount;
+        $member_account->fill($validated);
+        $member_account->save();
+        $member_account->refresh();
+
+        Session::flash('success_message', "Member Account [' $member_account->id '] has been added!");
+      
+        return redirect()->route('member.edit', ['id' => $member_account->member_id]);
+    }
+
+    /**
+     * Edit account
+     */
+    public function edit_account(Request $request)
+    {
+
+        $member_account_id = $request['id'] ?? 0;
+
+        $member_account = MemberAccount::with('member')
+            ->findOrFail($member_account_id);
+        
+        return view('pages.member_account_edit')
+            ->with('member_account', $member_account);
+    }
+
+    /**
+     * Edit account
+     */
+    public function update_account(Request $request)
+    {
+
+        $validated = $request->validate([
+            'bank' => 'required|string|max:255',
+            'account' => 'required|string|max:255'
+        ]);
+
+        $member_account_id = $request['id'] ?? 0;
+        $member_account = MemberAccount::findOrFail($member_account_id);
+
+        $member_account->fill($validated);
+        $member_account->save();
+        
+        Session::flash('success_message', "Member Account [' $member_account_id '] has been updated!");
+
+        return redirect()->route('member.edit_account', ['id' => $member_account_id]);
+    }
+
+    /**
+     * destrong account
+     */
+    public function destroy_account(Request $request)
+    {
+
+        // find the record and delete it
+        $member_account_id = $request['id'] ?? 0;
+        $member_account = MemberAccount::findOrFail($member_account_id);
+        $member_id = $member_account->member_id;
+
+        if ($member_account->amount != 0) {
+            Session::flash('error_message', "Unable to delete! Member Account ID [' $member_account_id '] has amount stored on it!");
+
+            return redirect()->route('member.edit_account', ['id' => $member_account_id]);
+        }
+
+        $member_account->delete();
+
+        // create success message 
+        Session::flash('success_message', "Member Account ID [' $member_account_id '] has been deleted!");
+
+        // go back to the member lists
+        return redirect()->route('member.edit', ['id' => $member_id]);
+
     }
 }
