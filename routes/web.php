@@ -89,6 +89,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 		// company adjustments
 		Route::get('adjustment', 'CompanyAdjustmentController@index')->name('company.adjustment');
+
+		Route::get('update', 'CompanyController@add_account')->name('company.add_account');
+		Route::post('store_account', 'CompanyController@store_account')->name('company.store_account');
+		Route::get('edit_account', 'CompanyController@edit_account')->name('company.edit_account');
+		Route::post('update_account', 'CompanyController@update_account')->name('company.update_account');
+		Route::post('destroy_account', 'CompanyController@destroy_account')->name('company.destroy_account');
 	});
 	
 

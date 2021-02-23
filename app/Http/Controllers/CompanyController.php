@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\{Company, CompanyAdjustment};
+use App\{Company, CompanyAdjustment, CompanyAccount};
 use Session;
 
 class CompanyController extends Controller
@@ -26,7 +26,8 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-        $company = Company::firstOrFail();
+        $company = Company::with('company_accounts')
+        ->firstOrFail();
 
         return view('pages.company')
             ->with('company',  $company);
@@ -98,8 +99,8 @@ class CompanyController extends Controller
             'date_founded' => 'required|date',
             'mission' => 'required|string|max:255',
             'vision' => 'required|string|max:255',
-            'bank' => 'required|string|max:255',
-            'account_number' => 'required|string|max:255',
+            // 'bank' => 'required|string|max:255',
+            // 'account_number' => 'required|string|max:255',
         ]);
 
         
@@ -201,13 +202,103 @@ class CompanyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Add account view
      */
-    public function destroy($id)
+    public function add_account(Request $request)
     {
-        //
+        // find the record and delete it
+        $company_id = $request['company_id'] ?? 0;
+        $company = Company::findOrFail($company_id);
+
+        return view('pages.company_account_add')
+            ->with('company', $company);
+    }
+
+    /**
+     * Store account
+     */
+    public function store_account(Request $request)
+    {
+        $validated = $request->validate([
+            'company_id' => 'required|exists:company,id',
+            'bank' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'account' => 'required|string|max:255'
+        ]);
+
+        $company_account = new CompanyAccount;
+        $company_account->fill($validated);
+        $company_account->save();
+        $company_account->refresh();
+
+        Session::flash('success_message', "company Account [' $company_account->id '] has been added!");
+      
+        return redirect()->route('company.index');
+    }
+
+
+    /**
+     * Edit account
+     */
+    public function edit_account(Request $request)
+    {
+
+        $company_account_id = $request['id'] ?? 0;
+
+        $company_account = CompanyAccount::with('company')
+            ->findOrFail($company_account_id);
+        
+        return view('pages.company_account_edit')
+            ->with('company_account', $company_account);
+    }
+
+    /**
+     * Edit account
+     */
+    public function update_account(Request $request)
+    {
+
+        $validated = $request->validate([
+            'bank' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'account' => 'required|string|max:255'
+        ]);
+
+        $company_account_id = $request['id'] ?? 0;
+        $company_account = CompanyAccount::findOrFail($company_account_id);
+
+        $company_account->fill($validated);
+        $company_account->save();
+        
+        Session::flash('success_message', "Company Account [' $company_account_id '] has been updated!");
+
+        return redirect()->route('company.edit_account', ['id' => $company_account_id]);
+    }
+
+    /**
+     * destrong account
+     */
+    public function destroy_account(Request $request)
+    {
+
+        // find the record and delete it
+        $company_account_id = $request['id'] ?? 0;
+        $company_account = CompanyAccount::findOrFail($company_account_id);
+        $company_id = $company_account->company_id;
+
+        if ($company_account->amount != 0) {
+            Session::flash('error_message', "Unable to delete! company Account ID [' $company_account_id '] has amount stored on it!");
+
+            return redirect()->route('company.edit_account', ['id' => $company_account_id]);
+        }
+
+        $company_account->delete();
+
+        // create success message 
+        Session::flash('success_message', "company Account ID [' $company_account_id '] has been deleted!");
+
+        // go back to the company lists
+        return redirect()->route('company.index');
+
     }
 }

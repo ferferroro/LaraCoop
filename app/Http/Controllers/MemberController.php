@@ -256,6 +256,7 @@ class MemberController extends Controller
         $validated = $request->validate([
             'member_id' => 'required|exists:members,id',
             'bank' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'account' => 'required|string|max:255'
         ]);
 
@@ -292,6 +293,7 @@ class MemberController extends Controller
 
         $validated = $request->validate([
             'bank' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'account' => 'required|string|max:255'
         ]);
 

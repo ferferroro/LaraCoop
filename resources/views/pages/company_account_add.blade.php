@@ -1,6 +1,6 @@
 @extends('layouts.app', [
     'class' => '',
-    'elementActive' => 'members'
+    'elementActive' => 'company'
 ])
 
 @section('content')
@@ -17,41 +17,29 @@
         @endif
         <div class="row">
             <div class="col-md-12 text-center">
-                <form class="col-md-12" action="{{ route('member.store_account') }}" method="POST" enctype="multipart/form-data">
+                <form class="col-md-12" action="{{ route('company.store_account') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="title">{{ __('Add Member Account') }}</h5>
+                            <h5 class="title">{{ __('Add Company Account') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
 
-                                <label class="col-md-2 col-form-label">{{ __('Member ID') }}</label>
+                                <label class="col-md-2 col-form-label">{{ __('Company Name') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="member_id" class="form-control" placeholder="Member ID" value="{{ $member->id }}" readonly>
+                                        <input type="text" name="company_name" class="form-control" placeholder="Company Name" value="{{ $company->name }}" readonly>
                                     </div>
-                                    @if ($errors->has('member_id'))
+                                    @if ($errors->has('company_name'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('member_id') }}</strong>
+                                            <strong>{{ $errors->first('company_name') }}</strong>
                                         </span>
                                     @endif
                                 </div>
 
-                                <label class="col-md-2 col-form-label">{{ __('Member Name') }}</label>
-                                <div class="col-md-10">
-                                    <div class="form-group">
-                                        <input type="text" name="member_name" class="form-control" placeholder="Member Name" value="{{ $member->name }}" readonly>
-                                    </div>
-                                    @if ($errors->has('member_name'))
-                                        <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('member_name') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <input type="hidden" name="member_id" value="{{ $member->id }}">
+                                <input type="hidden" name="company_id" value="{{ $company->id }}">
 
                                 <label class="col-md-2 col-form-label">{{ __('Bank') }}</label>
                                 <div class="col-md-10">
@@ -97,7 +85,7 @@
                                 <div class="col-md-12 text-right">
                                     <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
         
-                                    <a href="{{ route('member.edit', ['id' => $member->id]) }}" class="btn btn-info btn-round">
+                                    <a href="{{ route('company.index') }}" class="btn btn-info btn-round">
                                         &nbsp; Cancel &nbsp;
                                     </a>
 

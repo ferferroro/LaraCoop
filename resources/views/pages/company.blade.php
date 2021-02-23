@@ -69,7 +69,7 @@
                                     @endif
                                 </div>
 
-                                <label class="col-md-2 col-form-label">{{ __('Bank') }}</label>
+                                <!-- <label class="col-md-2 col-form-label">{{ __('Bank') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <input type="text" name="bank" class="form-control" placeholder="Bank" value="{{ $company['bank'] ?? '' }}" required>
@@ -91,7 +91,7 @@
                                             <strong>{{ $errors->first('account_number') }}</strong>
                                         </span>
                                     @endif
-                                </div>
+                                </div> -->
 
                                 <label class="col-md-2 col-form-label">{{ __('Address') }}</label>
                                 <div class="col-md-10">
@@ -228,16 +228,80 @@
                                  
                                 
                             </div>
+
+                            <!-- table start -->
+                            <div class="card card-plain">
+                                <div class="card-header">
+                                    <h4 class="card-title"> Accounts</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead class=" text-primary">
+                                                <th>
+                                                    ID
+                                                </th>
+                                                <th>
+                                                    Bank
+                                                </th>
+                                                <th>
+                                                    Name
+                                                </th>
+                                                <th>
+                                                    Account
+                                                </th>
+                                                <th>
+                                                    Amount
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                @isset($company->company_accounts)
+                                                    @foreach ($company->company_accounts as $company_account)
+                                                        <tr>
+                                                            <td>
+                                                                <a href="{{ route('company.edit_account', ['id' => $company_account->id]) }}" >
+                                                                    #{{ $company_account->id }}
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                {{ $company_account->bank }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $company_account->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $company_account->account }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $company_account->amount }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endisset
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- table end -->
                             
                         </div>
                         <div class="card-footer ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a href="{{ route('company.adjustment') }}" class="btn btn-info btn-round">
-                                        &nbsp; View Adjustments &nbsp;
-                                    </a>
-                                    <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
-                                    <br><br>
+                                    @if(Helper::canUpdateRecords())
+                                        <a href="{{ route('company.adjustment') }}" class="btn btn-info btn-round">
+                                            &nbsp; View Adjustments &nbsp;
+                                        </a>
+
+                                        <a href="{{ route('company.add_account', ['company_id' => $company['id']]) }}" class="btn btn-info btn-round">
+                                            Add Account
+                                        </a>
+                                        
+                                        <button type="submit" class="btn btn-info btn-round">{{ __('Save') }}</button>
+                                        <br><br>
+                                    @endif
                                 </div>
                             </div>
                         </div>

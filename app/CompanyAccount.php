@@ -5,10 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Helper\Helper;
 
-class Company extends Model
+class CompanyAccount extends Model
 {
     protected $guarded = ['id'];
-    protected $table = 'company';
 
     public static function boot()
     {
@@ -24,10 +23,10 @@ class Company extends Model
     }
 
     /**
-     * Get the company accounts details
+     * Get Company
      */
-    public function company_accounts()
+    public function company()
     {
-        return $this->hasMany('App\CompanyAccount', 'company_id', 'id');
+        return $this->belongsTo('App\Company', 'company_id', 'id');
     }
 }

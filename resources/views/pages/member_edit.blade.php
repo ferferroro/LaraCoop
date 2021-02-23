@@ -175,6 +175,9 @@
                                                     Bank
                                                 </th>
                                                 <th>
+                                                    Name
+                                                </th>
+                                                <th>
                                                     Account
                                                 </th>
                                                 <th>
@@ -192,6 +195,9 @@
                                                             </td>
                                                             <td>
                                                                 {{ $member_account->bank }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $member_account->name }}
                                                             </td>
                                                             <td>
                                                                 {{ $member_account->account }}
