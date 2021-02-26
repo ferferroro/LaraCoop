@@ -52,8 +52,10 @@
                                         <th> To </th>
                                         <th> Accepted </th>
                                         <th> Accepted By </th>
-                                        <th> Bank </th>
-                                        <th> Account </th>
+                                        <th> Bank From </th>
+                                        <th> Account From </th>
+                                        <th> Bank To </th>
+                                        <th> Account To </th>
                                         <th> Amount </th>
                                     </tr>
                                 </thead>
@@ -68,10 +70,10 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $transfer->member_from_info->name }}
+                                                {{ $transfer->transfer_from_name }}
                                             </td>
                                             <td>
-                                                {{ $transfer->member_to_info->name }}
+                                                {{ $transfer->transfer_to_name }}
                                             </td>
                                             <td>
                                                 {{ $transfer->is_accepted ? 'Yes' : 'No' }}
@@ -80,10 +82,16 @@
                                                 {{ $transfer->accepted_by_info->name ?? '' }}
                                             </td>
                                             <td>
-                                                {{ $transfer->bank_from }}
+                                                {{ $transfer->account_from_info->bank ?? '' }} 
                                             </td>
                                             <td>
-                                                {{ $transfer->account_number_from }}
+                                                {{ $transfer->account_from_info->account ?? '' }} 
+                                            </td>  
+                                            <td>
+                                                {{ $transfer->account_to_info->bank ?? '' }} 
+                                            </td>
+                                            <td>
+                                                {{ $transfer->account_to_info->account ?? '' }} 
                                             </td>  
                                             <td>
                                                 {{ $transfer->amount }}

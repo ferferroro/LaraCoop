@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\{Member, Transfer};
+use App\{Transfer, Member, MemberAccount, Company, CompanyAccount};
 use Illuminate\Validation\Rule;
 use Session;
 
@@ -19,11 +19,13 @@ class TransferController extends Controller
     {
         $search_string = $request['search_string'] ?? '';
         
-        $transfers = Transfer::with('member_from_info')
-            ->with('member_to_info')
+        $transfers = Transfer::with('account_from_info')
+            // ->with('transfer_to_info')
             ->with('accepted_by_info')
             ->where('search_text', 'like', '%' . $search_string . '%' )
             ->paginate(15);
+
+            // return $transfers;
 
         return view('pages.transfers')
             ->with('transfers',  $transfers)
@@ -37,10 +39,16 @@ class TransferController extends Controller
      */
     public function create()
     {
-        $members = DB::table('members')->get();
+        // $members = DB::table('members')->get();
+        $members = Member::with('member_accounts')
+            ->where('can_hold_fund', true)
+            ->get();
+        $company = Company::with('company_accounts')
+            ->firstOrFail();
 
         return view('pages.transfer_add')
-            ->with('members', $members);
+            ->with('members', $members)
+            ->with('company', $company);
     }
 
     /**
@@ -54,17 +62,81 @@ class TransferController extends Controller
 
         $validated = $request->validate([
             // from
-            'member_from' => 'required|exists:members,id',
+            'transfer_from' => 'required|integer',
             'transferred_at' => 'required|date',
-            'bank_from' => 'required|string',
-            'account_number_from' => 'required|string',
+            'account_from' => 'required|integer',
             'amount' => 'required|numeric|min:1',
             'remarks' => 'sometimes|string|max:255',
             // to
-            'member_to' => 'required|exists:members,id',
-            'bank_to' => 'required|string',
-            'account_number_to' => 'required|string',
+            'transfer_to' => 'required|integer',
+            'account_to' => 'required|integer',
         ]);
+
+        if ($validated['transfer_from'] != 0) {
+            $member_from = Member::find($validated['transfer_from']);
+
+            if (!$member_from) { 
+                Session::flash('error_message', "Invalid Transfer From");
+                return redirect()->route('transfer.add');
+            }
+
+            $account_from = MemberAccount::where('member_id', $member_from->id)
+                ->where('id', $validated['account_from'])
+                ->first();
+
+            if (!$account_from) {
+                Session::flash('error_message', "Invalid Account From");
+                return redirect()->route('transfer.create');
+            }
+        }
+        else {
+
+            $company = Company::first();
+
+            $account_from = CompanyAccount::where('company_id', $company->id)
+                ->where('id', $validated['account_from'])
+                ->first();
+
+            if (!$account_from) {
+                Session::flash('error_message', "Invalid Account From");
+                return redirect()->route('transfer.create');
+            }
+        }
+
+        if ($validated['transfer_to'] != 0) {
+            $member_to = Member::find($validated['transfer_to']);
+
+            if (!$member_to) { 
+                Session::flash('error_message', "Invalid Transfer To");
+                return redirect()->route('transfer.create');
+            }
+
+            $account_to = MemberAccount::where('member_id', $member_to->id)
+                ->where('id', $validated['account_to'])
+                ->first();
+
+            if (!$account_to) {
+                Session::flash('error_message', "Invalid Account To");
+                return redirect()->route('transfer.create');
+            }            
+        }
+        else {
+            $company = Company::first();
+
+            $account_to = CompanyAccount::where('company_id', $company->id)
+                ->where('id', $validated['account_to'])
+                ->first();
+
+            if (!$account_to) {
+                Session::flash('error_message', "Invalid Account to");
+                return redirect()->route('transfer.create');
+            }
+        }
+
+        if ($account_from->amount < $validated['amount']) {
+            Session::flash('error_message', "Account From does not have enough funds!");
+            return redirect()->route('transfer.create');
+        }
 
         DB::beginTransaction();
         try {
@@ -107,11 +179,18 @@ class TransferController extends Controller
 
         $transfer = Transfer::findOrFail($transfer_id);
 
-        $members = DB::table('members')->get();
+        $members = Member::get();
+        $company = Company::with('company_accounts')
+            ->firstOrFail();
+        $init_member_accounts_from = MemberAccount::where('member_id', $transfer->transfer_from)->get();
+        $init_member_accounts_to = MemberAccount::where('member_id', $transfer->transfer_to)->get();
 
         return view('pages.transfer_edit')
             ->with('transfer',  $transfer)
-            ->with('members', $members);
+            ->with('members', $members)
+            ->with('company', $company)
+            ->with('init_member_accounts_from', $init_member_accounts_from)
+            ->with('init_member_accounts_to', $init_member_accounts_to);
     }
 
     /**
@@ -123,19 +202,84 @@ class TransferController extends Controller
      */
     public function update(Request $request)
     {
+
         $validated = $request->validate([
             // from
-            'member_from' => 'required|exists:members,id',
+            'transfer_from' => 'required|integer',
             'transferred_at' => 'required|date',
-            'bank_from' => 'required|string',
-            'account_number_from' => 'required|string',
+            'account_from' => 'required|integer',
             'amount' => 'required|numeric|min:1',
             'remarks' => 'sometimes|string|max:255',
             // to
-            'member_to' => 'required|exists:members,id',
-            'bank_to' => 'required|string',
-            'account_number_to' => 'required|string',
+            'transfer_to' => 'required|integer',
+            'account_to' => 'required|integer',
         ]);
+
+        if ($validated['transfer_from'] != 0) {
+            $member_from = Member::find($validated['transfer_from']);
+
+            if (!$member_from) { 
+                Session::flash('error_message', "Invalid Transfer From");
+                return redirect()->route('transfer.add');
+            }
+
+            $account_from = MemberAccount::where('member_id', $member_from->id)
+                ->where('id', $validated['account_from'])
+                ->first();
+
+            if (!$account_from) {
+                Session::flash('error_message', "Invalid Account From");
+                return redirect()->route('transfer.create');
+            }
+        }
+        else {
+
+            $company = Company::first();
+
+            $account_from = CompanyAccount::where('company_id', $company->id)
+                ->where('id', $validated['account_from'])
+                ->first();
+
+            if (!$account_from) {
+                Session::flash('error_message', "Invalid Account From");
+                return redirect()->route('transfer.create');
+            }
+        }
+
+        if ($validated['transfer_to'] != 0) {
+            $member_to = Member::find($validated['transfer_to']);
+
+            if (!$member_to) { 
+                Session::flash('error_message', "Invalid Transfer To");
+                return redirect()->route('transfer.create');
+            }
+
+            $account_to = MemberAccount::where('member_id', $member_to->id)
+                ->where('id', $validated['account_to'])
+                ->first();
+
+            if (!$account_to) {
+                Session::flash('error_message', "Invalid Account To");
+                return redirect()->route('transfer.create');
+            }            
+        }
+        else {
+            $company = Company::first();
+
+            $account_to = CompanyAccount::where('company_id', $company->id)
+                ->where('id', $validated['account_to'])
+                ->first();
+
+            if (!$account_to) {
+                Session::flash('error_message', "Invalid Account to");
+                return redirect()->route('transfer.create');
+            }
+        }
+
+        if ($account_from->amount < $validated['amount']) {
+            Session::flash('error_message', "Account From does not have enough funds!");
+            return redirect()->route('transfer.create');
+        }
 
         $transfer_id = $request['id'] ?? 0;
         $transfer = Transfer::findOrFail($transfer_id);
@@ -212,36 +356,110 @@ class TransferController extends Controller
             Session::flash('error_message', "Transfer is already accepted!");
             return redirect()->route('transfer.edit', ['id' => $transfer_id]);
         }
-
-        
         
         DB::beginTransaction();
         try {
+             
 
-            // subtract fund on hand to sending member
-            $member_from = Member::findOrFail($transfer->member_from);
+            /**
+             * Amount update Start
+             */
 
+            // SUBTRACT FUND!
+            if ($transfer->transfer_from != 0) {   
+                // subtract fund to sending member
+                $member_from = Member::findOrFail($transfer->transfer_from);
 
-            if ($transfer->amount > $member_from->fund_on_hand ) {
-                Session::flash('error_message', "Sender does not have enough fund!");
-                return redirect()->route('transfer.edit', ['id' => $transfer_id]);
+                if ($transfer->amount > $member_from->fund_on_hand ) {
+                    Session::flash('error_message', "Sender does not have enough fund!");
+                    return redirect()->route('transfer.edit', ['id' => $transfer_id]);
+                }
+                
+                $member_from->fund_on_hand -= $transfer->amount;
+                $member_from->lockForUpdate();
+                $member_from->save();
+
+                // subtract fund from sending member account  
+                $account_from = MemberAccount::where('member_id', $transfer->transfer_from)
+                    ->where('id', $transfer->account_from)
+                    ->first();
+                $account_from->amount -= $transfer->amount;
+                $account_from->lockForUpdate();
+                $account_from->save();
+                
             }
-            
-            $member_from->fund_on_hand -= $transfer->amount;
-            $member_from->lockForUpdate();
-            $member_from->save();
+            else {
+                // subtract fund to sending Company
+                $company = Company::first();
+                if ($transfer->amount > $company->fund_available ) {
+                    Session::flash('error_message', "Company does not have enough fund!");
+                    return redirect()->route('transfer.edit', ['id' => $transfer_id]);
+                }
+
+                $company->fund_available -= $transfer->amount;
+                $company->lockForUpdate();
+                $company->save();
+
+                // subtract fund from sending company account  
+                $account_from = CompanyAccount::where('company_id', $company->id)
+                    ->where('id', $transfer->account_from)
+                    ->first();
+                $account_from->amount -= $transfer->amount;
+                $account_from->lockForUpdate();
+                $account_from->save();
+                
+            }
+
+            // ADD FUND!
+
+            // add fund on receiving member
+            if ($transfer->transfer_to != 0) {  
+                
+                // add fund to receiving member
+                $member_to = Member::findOrFail($transfer->transfer_to);
+                $member_to->fund_on_hand += $transfer->amount;
+                $member_to->lockForUpdate();
+                $member_to->save();
+
+                // add fund to receiving account
+                $account_to = MemberAccount::where('member_id', $transfer->transfer_to)
+                    ->where('id', $transfer->account_to)
+                    ->first();
+                $account_to->amount += $transfer->amount;
+                $account_to->lockForUpdate();
+                $account_to->save();
+            }
+            else {
+                // add fund to receiving Company
+                $company2 = Company::first();
+                $company2->fund_available += $transfer->amount;
+                $company2->lockForUpdate();
+                $company2->save();
+                
+                
+                // add fund to receiving Company Account
+                $account_to = CompanyAccount::where('company_id', $company2->id)
+                    ->where('id', $transfer->account_to)
+                    ->first();
+                $account_to->amount += $transfer->amount;
+                $account_to->lockForUpdate();
+                $account_to->save();
+            }
+
+            /**
+             * Amount update End
+             */
 
 
-            // add fund on hand to receiving member
-            $member_to = Member::findOrFail($transfer->member_to);
-            $member_to->fund_on_hand += $transfer->amount;
-            $member_to->lockForUpdate();
-            $member_to->save();
-
-
+            /**
+             * Mark as accepted Start
+             */
             $transfer->is_accepted = true;
             $transfer->lockForUpdate();
             $transfer->save();
+            /**
+             * Mark as accepted End
+             */
 
 
 
@@ -254,5 +472,47 @@ class TransferController extends Controller
         Session::flash('success_message', "Transfer has been accepted!");
 
         return redirect()->route('transfer.edit', ['id' => $transfer_id]);
+    }
+
+    /**
+     * Get account list
+     */
+    public function get_account_list(Request $request)
+    {
+        // find the record and delete it
+        $tranfer_from_id = $request['id'] ?? 0;
+        
+        $account_list = [];
+
+        if ($tranfer_from_id == 0 ) {
+            $company = Company::with('company_accounts')
+                ->findOrFail(1);
+
+            foreach($company->company_accounts as $company_account) {
+                $account_list[] = [
+                    "id" => $company_account->id,
+                    "bank" => $company_account->bank,
+                    "name" => $company_account->name,
+                    "account" => $company_account->account
+                ];
+            }
+        }
+        else {
+            $member = Member::with('member_accounts')
+                ->findOrFail($tranfer_from_id);
+
+            foreach($member->member_accounts as $member_account) {
+                $account_list[] = [
+                    "id" => $member_account->id,
+                    "bank" => $member_account->bank,
+                    "name" => $member_account->name,
+                    "account" => $member_account->account
+                ];
+            }
+        }
+
+        
+
+        return $account_list;
     }
 }

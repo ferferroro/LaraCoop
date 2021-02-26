@@ -20,31 +20,33 @@
                 <form class="col-md-12" action="{{ route('transfer.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
+                    <input type="hidden" name="_token" id="new_transfer_token" value="{{ csrf_token() }}">
+                    
                     <div class="card">
                         <div class="card-header">
                             <h5 class="title">{{ __('New Fund Transfer') }}</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row">
 
-                                <label class="col-md-2 col-form-label">{{ __('From Member') }}</label>
-                                <div class="col-md-10">
-                                    <div class="form-group">
-                                        <select name="member_from" class="form-control" id="member_from">
-                                            @foreach ($members as $member)
-                                                @if($member->can_hold_fund)
-                                                    <option value="{{ $member->id }}"  @if(old('member_id') == $member->id) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    @if ($errors->has('member_from'))
-                                        <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('member_from') }}</strong>
-                                        </span>
-                                    @endif
+                            @if (Session::has('success_message'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> {{ Session::get('success_message') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
+                            @endif
 
+                            @if (Session::has('error_message'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> {{ Session::get('error_message') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
+                        
+                            <div class="row">
                                 <label class="col-md-2 col-form-label">{{ __('Date Transferred') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
@@ -57,26 +59,40 @@
                                     @endif
                                 </div>   
 
-                                <label class="col-md-2 col-form-label">{{ __('From Bank') }}</label>
+                                <label class="col-md-2 col-form-label">{{ __('From') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="bank_from" class="form-control" placeholder="From Bank" value="{{ old('bank_from') ?? '' }}" required>
+                                        <select name="transfer_from" class="form-control" id="transfer_from" onchange="transfer_from_selected_on_new_transfer()">
+                                            <option value="0"  @if(old('member_id') == 0) selected @endif> {{ $company->name }} (Company)</option>
+                                            @foreach ($members as $member)
+                                                @if($member->can_hold_fund)
+                                                    <option value="{{ $member->id }}"  @if(old('member_id') == $member->id) selected @endif> {{ $member->id }}  - {{ $member->name }} (Member)</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    @if ($errors->has('bank_from'))
+                                    @if ($errors->has('transfer_from'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('bank_from') }}</strong>
+                                            <strong>{{ $errors->first('transfer_from') }}</strong>
                                         </span>
                                     @endif
                                 </div>
-
-                                <label class="col-md-2 col-form-label">{{ __('Account Number') }}</label>
+                                
+                                <label class="col-md-2 col-form-label">{{ __('From Account') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="account_number_from" class="form-control" placeholder="Account Number" value="{{ old('account_number_from') ?? '' }}" required>
+                                        <select name="account_from" class="form-control" id="account_from">
+                                            @isset($company->company_accounts)
+                                                @foreach ($company->company_accounts as $company_account)
+                                                    <option value="{{ $company_account->id }}" >{{ $company_account->bank }} - {{ $company_account->name }} ({{ $company_account->account }})</option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
                                     </div>
-                                    @if ($errors->has('account_number_from'))
+
+                                    @if ($errors->has('account_from'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('account_number_from') }}</strong>
+                                            <strong>{{ $errors->first('account_from') }}</strong>
                                         </span>
                                     @endif
                                 </div>
@@ -108,10 +124,11 @@
                                 </div>
 
 
-                                <label class="col-md-2 col-form-label">{{ __('To Member') }}</label>
+                                <label class="col-md-2 col-form-label">{{ __('To') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <select name="member_to" class="form-control" id="member_to">
+                                        <select name="transfer_to" class="form-control" id="transfer_to" onchange="transfer_to_selected_on_new_transfer()">
+                                            <option value="0"  @if(old('member_id') == 0) selected @endif> {{ $company->name }} (Company)</option>
                                             @foreach ($members as $member)
                                                 @if($member->can_hold_fund)
                                                     <option value="{{ $member->id }}"  @if(old('member_id') == $member->id) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
@@ -120,33 +137,27 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    @if ($errors->has('member_to'))
+                                    @if ($errors->has('transfer_to'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('member_to') }}</strong>
+                                            <strong>{{ $errors->first('transfer_to') }}</strong>
                                         </span>
                                     @endif
                                 </div>
 
-                                <label class="col-md-2 col-form-label">{{ __('To Bank') }}</label>
+                                <label class="col-md-2 col-form-label">{{ __('To Account') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="bank_to" class="form-control" placeholder="From Bank" value="{{ old('bank_to') ?? '' }}" required>
+                                        <select name="account_to" class="form-control" id="account_to">
+                                            @isset($company->company_accounts)
+                                                @foreach ($company->company_accounts as $company_account)
+                                                    <option value="{{ $company_account->id }}" >{{ $company_account->bank }} - {{ $company_account->name }} ({{ $company_account->account }})</option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
                                     </div>
-                                    @if ($errors->has('bank_to'))
+                                    @if ($errors->has('account_to'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('bank_to') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <label class="col-md-2 col-form-label">{{ __('Account Number') }}</label>
-                                <div class="col-md-10">
-                                    <div class="form-group">
-                                        <input type="text" name="account_number_to" class="form-control" placeholder="Account Number" value="{{ old('account_number_to') ?? '' }}" required>
-                                    </div>
-                                    @if ($errors->has('account_number_to'))
-                                        <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('account_number_to') }}</strong>
+                                            <strong>{{ $errors->first('account_to') }}</strong>
                                         </span>
                                     @endif
                                 </div>

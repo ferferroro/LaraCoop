@@ -98,6 +98,13 @@
                                             <strong>{{ $errors->first('account') }}</strong>
                                         </span>
                                     @endif
+                                </div>
+                                
+                                <label class="col-md-2 col-form-label">{{ __('Amount') }}</label>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input type="text" name="amount" class="form-control" placeholder="0.00" value="{{ $company_account->amount }}" disabled>
+                                    </div>
                                 </div> 
                                   
                             </div>

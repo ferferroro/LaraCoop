@@ -151,6 +151,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('update', 'TransferController@update')->name('transfer.update');
 		Route::post('destroy', 'TransferController@destroy')->name('transfer.destroy');
 		Route::post('accept', 'TransferController@accept')->name('transfer.accept');
+		Route::get('get_account_list', 'TransferController@get_account_list')->name('transfer.get_account_list');
 	});
 
 });

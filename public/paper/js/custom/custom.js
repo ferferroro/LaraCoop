@@ -123,3 +123,38 @@ function call_side_active_color(color)
       }
    });
 }
+
+
+function transfer_from_selected_on_new_transfer() {
+   $.ajax({
+      type:'GET',
+      url: "/transfer/get_account_list/",
+      data:{
+       "id": $("#transfer_from").val(),
+       "_token": $('#new_transfer_plugin').val(),
+     },
+      success:function(data) {
+         $("#account_from").html('');
+         $.each(data, function(){
+            $("#account_from").append('<option value="'+ this.id +'">'+ this.bank + " - " + this.name + " (" + this.account + ")" +  '</option>')
+         });
+      }
+   });
+}
+
+function transfer_to_selected_on_new_transfer() {
+   $.ajax({
+      type:'GET',
+      url: "/transfer/get_account_list/",
+      data:{
+       "id": $("#transfer_to").val(),
+       "_token": $('#new_transfer_plugin').val(),
+     },
+      success:function(data) {
+         $("#account_to").html('');
+         $.each(data, function(){
+            $("#account_to").append('<option value="'+ this.id +'">'+ this.bank + " - " + this.name + " (" + this.account + ")" +  '</option>')
+         });
+      }
+   });
+}
