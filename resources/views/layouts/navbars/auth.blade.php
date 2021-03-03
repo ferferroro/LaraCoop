@@ -2,11 +2,11 @@
     <div class="logo">
         <a href="{{ route('page.index', 'dashboard') }}" class="simple-text logo-mini">
             <div class="logo-image-small">
-                <img src="{{ asset('paper') }}/img/logo-small.png">
+                <img src="{{ asset('paper') }}/img/LaraCoop.png">
             </div>
         </a>
         <a href="{{ route('home') }}" class="simple-text logo-normal">
-            {{ __('HelloCoop') }} 
+            {{ __('LaraCoop') }} 
         </a>
     </div>
     <div class="sidebar-wrapper">
