@@ -6,6 +6,10 @@
 
 <p align="center"><a href="https://github.com/ferferroro/LaraCoop" target="_blank">![alt text](/public/img/LaraCoop.png)</a></p>
 
+<p align="center">
+  <img src="https://github.com/ferferroro/LaraCoop/blob/master/public/paper/img/LaraCoop.png?raw=true" alt="LaraCoop's Image"/>
+</p>
+
 # LaraCoop
 
 LaraCoop is a web application made in Laravel. It is designed to handle basic Cooperative operations such as, house keeping of Funds, maintaining members along with contribution collection, maintaining borrowers and their loans.
