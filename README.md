@@ -1,61 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+![alt text](https://github.com/ferferroro/LaraCoop/blob/[master]/public/paper/img/LaraCoop.png?raw=true)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# LaraCoop
 
-## About Laravel
+LaraCoop is a web application made in Laravel. It is designed to handle basic Cooperative operations such as, house keeping of Funds, maintaining members along with contribution collection, maintaining borrowers and their loans.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+While the initial design is to handle a Cooperative, this can also be used as a personal housekeeping app to monitor individuals that has a debts on you.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Getting Started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-## Learning Laravel
+## Demo
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Preview of CoopApp is deployed on Hostinger.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Demo: https://laracoop.codecarpentry.com/ Login: admin123@gmail.com/admin123
 
-## Laravel Sponsors
+Please dont spam the demo :)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Prerequisites
 
-### Premium Partners
+What things you need to install the software
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+```
+XAMPP
+Laravel 7
+```
 
-## Contributing
+### Installing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+##### 1. Clone the repository:
 
-## Code of Conduct
+Open a terminal or a Gitbash
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+*You can Fork this repo to make a copy of your own in case you want to add functionaliy
 
-## Security Vulnerabilities
+Select a directory and clone this github repo, (*If you forked this repo clone your own version, so you can commit further changes*)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+git clone https://github.com/ferferroro/asdlfjksdfkj.git
+```
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+##### 2.Install Requirements:
+
+After cloning, make sure you are in the working directory
+
+```
+cd LaraCoop
+```
+
+Type in your terminal:
+
+```
+composer require laravel/ui and php artisan ui vue --auth
+```
+
+Install this preset
+```
+composer require laravel-frontend-presets/paper
+```
+
+Install the Now Ui Dashboard preset
+```
+php artisan ui paper
+```
+
+Dump-autoload
+```
+composer dump-autoload
+```
+
+If installing on local pc you can the command below to start the app (Note: dont run this command on production server)
+```
+php artisan serve
+```
+
+## Deployment
+
+Nothing specific here, choose your own Server.
+
+Unless you want to deploy a your own demo on Hostinger, you can always contact me.
+
+## Built With
+
+* [Laravel](https://laravel.com/docs/7.x) - The web framework used
+* [Paper Dashboard](https://www.creative-tim.com/live/paper-dashboard-laravel) - Admin template
+
+## Things you can improve
+
+1. Ajax column sorting
+2. Use modal for searching records
+3. Standardize coding based on your preference
+
+## Author
+
+* **Romel Fernando - [Buy me Coffee](https://www.paypal.com/paypalme2/ferferroro)**
+
+## Acknowledgments
+
+* My special someone
+* My Family
+* Friends
