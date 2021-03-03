@@ -10,7 +10,7 @@
                 <div class="header-body text-center mb-7">
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-md-12 pt-5">
-                            <h1 class="@if(Auth::guest()) text-white @endif">{{ __('Welcome to HelloCoop') }}</h1>
+                            <h1 class="@if(Auth::guest()) text-white @endif">{{ __('Welcome to LaraCoop') }}</h1>
 
                             <p class="@if(Auth::guest()) text-white @endif text-lead mt-3 mb-0">
                                 {{ __('Lend hands with friends and the world around you on Hello Cooperative Web Application.') }}
