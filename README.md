@@ -97,7 +97,7 @@ Unless you want to deploy a your own demo on Hostinger, you can always contact m
 
 ## Author
 
-* **Romel Fernando - [Buy me Coffee](https://www.paypal.com/paypalme2/ferferroro)**
+* **Romel Fernando - [Buy me Coffee](https://paypal.me/ferferroro)**
 
 ## Acknowledgments
 
