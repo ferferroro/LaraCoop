@@ -83,4 +83,12 @@ class Loan extends Model
     {
         return $this->loan_details->sum('interest_amount');
     }
+
+    /**
+     * Get the loan details total
+     */
+    public function loan_details_unpaid_total()
+    {
+        return $this->loan_details->sum('amount_due') - $this->loan_details->sum('amount_payed');
+    }
 }

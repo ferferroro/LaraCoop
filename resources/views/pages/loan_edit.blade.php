@@ -352,9 +352,12 @@
 
                                         @if(Helper::isMasterAccount() && $loan->is_settled == false)
                                             <!-- Settle Button trigger modal -->
-                                            <button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#settleLoanModal">
+                                            <!-- <button type="button" class="btn btn-info btn-round" 
+                                                data-toggle="modal" 
+                                                data-target="#settleLoanModal" 
+                                                >
                                                 Settle
-                                            </button>
+                                            </button> -->
                                             <!-- Settle Button trigger modal -->
                                         @endif
 
@@ -656,6 +659,37 @@
 
                 </form>
                 <!-- Form end | Create Penalty  -->
+
+                <!-- Form start | Loan Settle  -->
+                <form class="col-md-12" action="{{ route('loan.settle', ['id' => $loan['id']]) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('POST')
+
+                    <!-- Modal Start  -->
+                    <div class="modal fade" id="settleLoanModal" tabindex="-1" role="dialog" aria-labelledby="settleLoanModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="settleLoanModalLabel">Transfer</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>Forcing to settle this loan means the Client is unable to make any payments and Company has lost Money.</h4>
+                                <h4>Are you sure you want to settle this Loan?</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="submit" class="btn btn-secondary">{{ __('Settle') }}</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <!-- Modal End-->
+
+                </form>
+                <!-- Form end | Loan Settle  -->
 
             </div>
         </div>

@@ -420,4 +420,73 @@ class LoanController extends Controller
 
         return redirect()->route('loan.edit', ['id' => $loan_id]); 
     }
+
+
+    /**
+     * Settle loan
+     */
+    public function settle(Request $request)
+    {
+
+        // /**
+        //  * if approved but not transferred then we dont have loss
+        //  * 1. put back the fund in reserve to the fund available
+        //  * 
+        //  * if approved and transferred
+        //  * 1. remove the fund on transit
+        //  * 2. remove from total fund, available fund
+        //  */
+
+
+        // $company = Company::lockForUpdate()
+        //     ->firstOrFail();
+        // $loan_id = $request['id'] ?? 0;
+        // $loan = Loan::lockForUpdate()
+        //     ->findOrFail($loan_id);
+
+        // // check if okay to proceed
+        // if ($loan->is_approved == false) {
+        //     Session::flash('error_message', "Please approve the loan first!");
+        //     return redirect()->route('loan.edit', ['id' => $loan_id]);
+        // }
+
+        // // check if okay to proceed
+        // if ($loan->is_settled) {
+        //     Session::flash('error_message', "Loan is already marked as Settled!");
+        //     return redirect()->route('loan.edit', ['id' => $loan_id]);
+        // }
+
+        // // check if okay to proceed
+        // if ($loan->is_transferred == false) {
+        //     Session::flash('error_message', "Loan is not yet transferred!");
+        //     return redirect()->route('loan.edit', ['id' => $loan_id]);
+        // }
+
+        // DB::beginTransaction();
+        // try {
+        //     // $loan->is_settled = true;
+        //     // $loan->lockForUpdate();
+        //     // $loan->save();
+
+        //     $company->fund_total -= $loan->loan_details_unpaid_total(); 
+        //     $company->fund_lended -= $loan->loan_details_unpaid_total();
+        //     // $company->fund_profit += $loan->loan_details_total_interest();
+        //     // $company->lockForUpdate();
+        //     // $company->save();
+
+        //     // $loan->borrower->balance = $loan->loan_details_total();
+        //     // $loan->borrower->lockForUpdate();
+        //     // $loan->borrower->save();
+
+        //     DB::commit();
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     throw $e;
+        // }
+
+        // // create success message 
+        // Session::flash('success_message', "Loan ID [' $loan_id '] has been marked as Settled!");
+
+        // return redirect()->route('loan.edit', ['id' => $loan_id]); 
+    }
 }

@@ -119,6 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('destroy', 'LoanController@destroy')->name('loan.destroy');		
 		Route::post('approve', 'LoanController@approve')->name('loan.approve');
 		Route::post('transfer', 'LoanController@transfer')->name('loan.transfer');
+		Route::post('settle', 'LoanController@settle')->name('loan.settle');
 
 		Route::group(['prefix' => 'detail'], function ($router) {
 			Route::post('pay', 'LoanDetailController@pay')->name('loan.detail.pay');
