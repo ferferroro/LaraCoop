@@ -30,6 +30,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
+	// Dashboard routes
+	Route::group(['prefix' => 'dashboard_data'], function ($router) {
+		Route::get('index', 'DashboardController@index')->name('dashboard_data.index');
+		Route::post('update', 'DashboardController@update')->name('dashboard_data.update');
+	});
+
 	// Home routes
 	Route::group(['prefix' => 'home'], function ($router) {
 		Route::get('loan_chart_data', 'HomeController@loan_chart_data')->name('home.loan_chart_data');

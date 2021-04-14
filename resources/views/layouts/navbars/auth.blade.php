@@ -26,9 +26,18 @@
                     <p>{{ __('Setup Menu') }}</p>
                 </a>
             </li>
-
         @endforelse
 
+        @if(Helper::getMenuList())
+            @if(auth()->user()->is_master_account )
+                <li class="{{ $elementActive == 'build_dashboard_data' ? 'active' : '' }}">
+                    <a href="{{ route('dashboard_data.index') }}">
+                    <i class="nc-icon nc-chart-bar-32"></i>
+                        <p>{{ __('Build Dashboard Data') }}</p>
+                    </a>
+                </li>
+            @endif
+        @endif
         
 
             <!-- <hr>
