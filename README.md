@@ -88,6 +88,7 @@ Unless you want to deploy a your own demo on Hostinger, you can always contact m
 
 * [Laravel](https://laravel.com/docs/7.x) - The web framework used
 * [Paper Dashboard](https://www.creative-tim.com/live/paper-dashboard-laravel) - Admin template
+* [Paper Dashboard](https://secure.2checkout.com/order/product.php?PRODS=4693413&QTY=1&AFFILIATE=147229) - Pro Version 
 
 ## Things you can improve
 
