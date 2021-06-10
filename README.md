@@ -40,7 +40,7 @@ Open a terminal or a Gitbash
 Select a directory and clone this github repo, (*If you forked this repo clone your own version, so you can commit further changes*)
 
 ```
-git clone https://github.com/ferferroro/asdlfjksdfkj.git
+git clone https://github.com/ferferroro/LaraCoop.git
 ```
 
 
