@@ -16,7 +16,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 Preview of CoopApp is deployed on Hostinger.
 
-Demo: https://laracoop.codecarpentry.com/ Login: admin123@gmail.com/admin123
+Demo: http://laracoop.codecarpentry.com/ Login: admin123@gmail.com/admin123
 
 Please dont spam the demo :)
 
