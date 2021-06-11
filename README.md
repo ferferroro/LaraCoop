@@ -55,22 +55,39 @@ cd LaraCoop
 Type in your terminal:
 
 ```
-composer require laravel/ui and php artisan ui vue --auth
+composer install
 ```
 
-Install this preset
+Create a .env file
 ```
-composer require laravel-frontend-presets/paper
-```
-
-Install the Now Ui Dashboard preset
-```
-php artisan ui paper
+cp .env.example .env
 ```
 
-Dump-autoload
+Generate application key
 ```
-composer dump-autoload
+php artisan key:generate
+```
+
+add database config
+```
+   DB_DATABASE=your_database_name 
+   DB_USERNAME=your_database_username
+   DB_PASSWORD=your_database_password  
+```
+
+Scaffold auth - but make sure not to override any of our existing files 
+```
+   php artisan ui vue --auth 
+```
+
+Run the migrations 
+```
+   php artisan migrate
+```
+
+Refresh cache- generate list classes that needs to be included on the Project
+```
+   composer dump-autoload
 ```
 
 If installing on local pc you can the command below to start the app (Note: dont run this command on production server)
