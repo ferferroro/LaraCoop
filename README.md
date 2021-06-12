@@ -68,16 +68,11 @@ Generate application key
 php artisan key:generate
 ```
 
-add database config
+add database config (open the .env and update the db credentials)
 ```
    DB_DATABASE=your_database_name 
    DB_USERNAME=your_database_username
    DB_PASSWORD=your_database_password  
-```
-
-Scaffold auth - but make sure not to override any of our existing files 
-```
-   php artisan ui vue --auth 
 ```
 
 Run the migrations 
@@ -85,7 +80,7 @@ Run the migrations
    php artisan migrate
 ```
 
-Refresh cache- generate list classes that needs to be included on the Project
+Refresh cache - generate list classes that needs to be included on the Project
 ```
    composer dump-autoload
 ```
@@ -99,7 +94,7 @@ php artisan serve
 
 Nothing specific here, choose your own Server.
 
-Unless you want to deploy a your own demo on Hostinger, you can always contact me.
+Unless you want to deploy a your own demo on Hostinger, you can always contact me ( In Hostinger, same installation steps, except we need to setup a .htaccess file).
 
 ## Built With
 

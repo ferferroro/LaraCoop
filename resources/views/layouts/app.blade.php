@@ -44,11 +44,11 @@ The above copyright notice and this permission notice shall be included in all c
 
     <!-- Twitter Card data -->
     <!-- <meta name="twitter:card" content="product">
-    <meta name="twitter:site" content="@helloCooperative">
+    <meta name="twitter:site" content="@laraCooperative">
     <meta name="twitter:title" content="LaraCoop by Romel Fernando">
 
     <meta name="twitter:description" content="Lend hands with friends and the world around you on Laravel Cooperative Web Application.">
-    <meta name="twitter:creator" content="@helloCooperative">
+    <meta name="twitter:creator" content="@laraCooperative">
     <meta name="twitter:image" content="https://s3.amazonaws.com/creativetim_bucket/products/209/opt_pd_laravel_thumbnail.jpg"> -->
 
 
@@ -62,7 +62,7 @@ The above copyright notice and this permission notice shall be included in all c
     <meta property="og:site_name" content="Creative Tim" /> -->
     
     <title>
-        {{ __('HelloCoop') }}
+        {{ __('LaraCoop') }}
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />

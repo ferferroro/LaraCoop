@@ -13,7 +13,7 @@
                             <h1 class="@if(Auth::guest()) text-white @endif">{{ __('Welcome to LaraCoop') }}</h1>
 
                             <p class="@if(Auth::guest()) text-white @endif text-lead mt-3 mb-0">
-                                {{ __('Lend hands with friends and the world around you on Hello Cooperative Web Application.') }}
+                                {{ __('Lend hands with friends and the world around you on Lara Cooperative Web Application.') }}
                             </p>
 
                             <br>
