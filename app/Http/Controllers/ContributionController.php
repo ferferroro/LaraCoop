@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\{Contribution, Company, Member};
+use App\{Contribution, Company, Member, MemberAccount};
 use Session;
 
 class ContributionController extends Controller
@@ -62,6 +62,7 @@ class ContributionController extends Controller
             'period' => 'required|string',
             'amount' => 'required|numeric|min:1',
             'fund_collector' => 'required|exists:members,id',
+            'fund_collector_account_id' => 'required|exists:member_accounts,id',
             'remarks' => 'sometimes|string|max:255',
         ]);
 
@@ -103,12 +104,16 @@ class ContributionController extends Controller
     {
         $contribution_id = $request['id'] ?? 0;
 
-        $contribution = Contribution::findOrFail($contribution_id);
-        $members = DB::table('members')->get();
+        $contribution = Contribution::findOrFail($contribution_id);        
+        $members = Member::with('member_accounts')
+            ->get();
+        $member = Member::with('member_accounts')
+            ->findOrFail($contribution->fund_collector);
 
         return view('pages.contribution_edit')
             ->with('contribution',  $contribution)
-            ->with('members',  $members);
+            ->with('members',  $members)
+            ->with('member_accounts', $member->member_accounts);
     }
 
     /**
@@ -126,7 +131,9 @@ class ContributionController extends Controller
             'member_id' => 'required|exists:members,id',
             'period' => 'required|string',
             'amount' => 'required|numeric|min:1',
-            'remarks' => 'sometimes|string|max:255'
+            'fund_collector' => 'required|exists:members,id',
+            'fund_collector_account_id' => 'required|exists:member_accounts,id',
+            'remarks' => 'sometimes|string|max:255',
         ]);
 
         $contribution_id = $request['id'] ?? 0;
@@ -248,6 +255,12 @@ class ContributionController extends Controller
                 ->findOrFail($contribution->fund_collector);
             $member->fund_on_hand += $contribution->amount;
             $member->save();
+
+            // update collector's fund
+            $member_account = MemberAccount::lockForUpdate()
+                ->findOrFail($contribution->fund_collector_account_id);
+            $member_account->amount += $contribution->amount;
+            $member_account->save();
 
             $company = Company::lockForUpdate()->firstOrFail();
             $company->fund_total += $contribution->amount;

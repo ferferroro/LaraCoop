@@ -110,7 +110,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Fund Collector') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <select name="fund_collector" class="form-control" id="fund_collector" {{  $contribution['is_approved'] ? 'disabled' : 'required' }}>
+                                        <select name="fund_collector" class="form-control" id="fund_collector" {{  $contribution['is_approved'] ? 'disabled' : 'required' }} onchange="fund_collector_selected_on_new_contribution()">
                                             @foreach ($members as $member)
                                                 @if($member->can_hold_fund)
                                                     <option value="{{ $member->id }}" @if($member->id == $contribution['fund_collector']) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
@@ -122,6 +122,23 @@
                                     @if ($errors->has('fund_collector'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
                                             <strong>{{ $errors->first('fund_collector') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Account') }}</label>
+                                <div class="col-md-10">
+
+                                    <div class="form-group">
+                                        <select name="fund_collector_account_id" class="form-control" id="fund_collector_account_id" {{  $contribution['is_approved'] ? 'disabled' : 'required' }} >
+                                            @foreach ($member_accounts as $member_account)
+                                                <option value="{{ $member_account['id'] }}" @if($contribution->fund_collector_account_id == $member_account['id']) selected @endif> {{ $member_account->bank }} - {{ $member_account->name }} ({{ $member_account->account }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('fund_collector_account_id'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('fund_collector_account_id') }}</strong>
                                         </span>
                                     @endif
                                 </div>

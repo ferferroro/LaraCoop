@@ -77,6 +77,10 @@ class LoanDetailController extends Controller
                     $company->fund_available += $var_payment;
                     $company->fund_profit += $var_payment;
                 }
+
+                if ($company->fund_lended < 0) {
+                    $company->fund_lended = 0;
+                }
                 $company->lockForUpdate();
                 $company->save();
 

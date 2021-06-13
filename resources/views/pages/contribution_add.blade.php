@@ -87,7 +87,8 @@
                                 <div class="col-md-10">
 
                                     <div class="form-group">
-                                        <select name="fund_collector" class="form-control" id="fund_collector">
+                                        <select name="fund_collector" class="form-control" id="fund_collector" onchange="fund_collector_selected_on_new_contribution()">
+                                            <option value="0"> - </option>
                                             @foreach ($members as $member)
                                                 @if($member->can_hold_fund)
                                                     <option value="{{ $member->id }}"> {{ $member->id }}  - {{ $member->name }}</option>
@@ -101,6 +102,22 @@
                                         </span>
                                     @endif
                                 </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Account') }}</label>
+                                <div class="col-md-10">
+
+                                    <div class="form-group">
+                                        <select name="fund_collector_account_id" class="form-control" id="fund_collector_account_id">
+                                            
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('fund_collector_account_id'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('fund_collector_account_id') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
 
                                 <label class="col-md-2 col-form-label">{{ __('Remarks') }}</label>
                                 <div class="col-md-10">

@@ -324,7 +324,7 @@ class LoanController extends Controller
         }
 
         // Check if company has enough fund
-        if ($loan->loan_details_total() > $company->fund_available) {
+        if ($loan->loan_details_total_principal() > $company->fund_available) {
             Session::flash('error_message', "Company does not have enough fund!");
             return redirect()->route('loan.edit', ['id' => $loan_id]);
         }
@@ -341,8 +341,8 @@ class LoanController extends Controller
             // $company->save();
 
             
-            $company->fund_available -= $loan->loan_details_total();
-            $company->fund_reserved += $loan->loan_details_total();
+            $company->fund_available -= $loan->loan_details_total_principal();
+            $company->fund_reserved += $loan->loan_details_total_principal();
             $company->save();
 
             DB::commit();
@@ -387,7 +387,7 @@ class LoanController extends Controller
         }
 
         // Check if company has enough fund
-        if ($loan->loan_details_total() > $company->fund_reserved) {
+        if ($loan->loan_details_total_principal() > $company->fund_reserved) {
             Session::flash('error_message', "Company does not have reserved fund!");
             return redirect()->route('loan.edit', ['id' => $loan_id]);
         }
@@ -398,10 +398,10 @@ class LoanController extends Controller
             $loan->lockForUpdate();
             $loan->save();
 
-            $company->fund_total += $loan->loan_details_total();
-            $company->fund_lended += $loan->loan_details_total();
+            $company->fund_total += $loan->loan_details_total_interest();
+            $company->fund_lended += $loan->loan_details_total_principal();
             $company->fund_profit += $loan->loan_details_total_interest();
-            $company->fund_reserved -= $loan->loan_details_total();
+            $company->fund_reserved -= $loan->loan_details_total_principal();
             $company->lockForUpdate();
             $company->save();
 
