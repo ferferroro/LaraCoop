@@ -404,9 +404,9 @@ class TransferController extends Controller
                     return redirect()->route('transfer.edit', ['id' => $transfer_id]);
                 }
 
-                $company->fund_available -= $transfer->amount;
-                $company->lockForUpdate();
-                $company->save();
+                // $company->fund_available -= $transfer->amount;
+                // $company->lockForUpdate();
+                // $company->save();
                 
                 $account_from->amount -= $transfer->amount;
                 $account_from->lockForUpdate();
@@ -436,9 +436,9 @@ class TransferController extends Controller
             else {
                 // add fund to receiving Company
                 $company2 = Company::first();
-                $company2->fund_available += $transfer->amount;
-                $company2->lockForUpdate();
-                $company2->save();
+                // $company2->fund_available += $transfer->amount;
+                // $company2->lockForUpdate();
+                // $company2->save();
                 
                 
                 // add fund to receiving Company Account
