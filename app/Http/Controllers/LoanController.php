@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\{Company, Loan, LoanDetail};
+use App\{Company, Loan, LoanDetail, CompanyAccount, MemberAccount, Member};
 use Illuminate\Validation\Rule;
 use Session;
 use Carbon\Carbon;
@@ -82,6 +82,7 @@ class LoanController extends Controller
             'percent_interest' => 'required|numeric|min:0',
             'percent_penalty' => 'required|numeric|min:0',
             'member_id' => 'required|exists:members,id',
+            'member_account_id' => 'required|exists:member_accounts,id',
             'remarks' => 'sometimes|string|max:255'
         ]);
 
@@ -158,20 +159,17 @@ class LoanController extends Controller
         $borrowers = DB::table('borrowers')->get();
         $members = DB::table('members')->get();
         $company = DB::table('company')->first();
-
-        $show_button = [
-            'approve' => true,
-            'settle' => true,
-            'save' => true,
-            'penalty' => false,
-            'delete' => true
-        ];
-
+        $member_account = MemberAccount::findOrFail($loan->member_account_id);
+        $member = Member::with('member_accounts')
+            ->findOrFail($loan->member_id);
+        
         return view('pages.loan_edit')
             ->with('loan',  $loan)
             ->with('members', $members)
             ->with('borrowers', $borrowers)
-            ->with('company', $company);
+            ->with('company', $company)
+            ->with('saved_member_account', $member_account)
+            ->with('selected_member_accounts', $member->member_accounts);
     }
 
     /**
@@ -202,6 +200,7 @@ class LoanController extends Controller
             'percent_interest' => 'required|numeric|min:0',
             'percent_penalty' => 'required|numeric|min:0',
             'member_id' => 'required|exists:members,id',
+            'member_account_id' => 'required|exists:member_accounts,id',
             'remarks' => 'sometimes|string|max:255'
         ]);
 
@@ -305,6 +304,9 @@ class LoanController extends Controller
         $loan = Loan::lockForUpdate()
             ->findOrFail($loan_id);
 
+        $member_account = MemberAccount::lockForUpdate()
+            ->findOrFail($loan->member_account_id);
+
         // check if okay to proceed
         if ($loan->is_approved) {
             Session::flash('error_message', "Loan is already marked as approved!");
@@ -323,9 +325,9 @@ class LoanController extends Controller
             return redirect()->route('loan.edit', ['id' => $loan_id]);
         }
 
-        // Check if company has enough fund
-        if ($loan->loan_details_total_principal() > $company->fund_available) {
-            Session::flash('error_message', "Company does not have enough fund!");
+        // Check if source account has enough funds
+        if ($loan->loan_details_total_principal() > $member_account->amount) {
+            Session::flash('error_message', "Source Account does not have enough fund!");
             return redirect()->route('loan.edit', ['id' => $loan_id]);
         }
 
@@ -344,6 +346,9 @@ class LoanController extends Controller
             $company->fund_available -= $loan->loan_details_total_principal();
             $company->fund_reserved += $loan->loan_details_total_principal();
             $company->save();
+
+            $member_account->amount -= $loan->loan_details_total_principal();
+            $member_account->save();
 
             DB::commit();
         } catch (\Exception $e) {

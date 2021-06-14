@@ -185,7 +185,7 @@
                                     @endif
                                 </div>
 
-                                <label class="col-md-2 col-form-label">{{ __('Referrer') }}</label>
+                                <label class="col-md-2 col-form-label">{{ __('Collector') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         <select name="member_id" class="form-control" id="member_id">
@@ -197,6 +197,24 @@
                                     @if ($errors->has('member_id'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
                                             <strong>{{ $errors->first('member_id') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Source Account') }}</label>
+                                <div class="col-md-10">
+
+                                    <div class="form-group">
+                                        <select name="member_account_id" class="form-control" id="member_account_id">
+                                            
+                                            @foreach ($selected_member_accounts as $member_account)
+                                                <option value="{{ $member_account['id'] }}" @if($loan->member_account_id == $member_account['id']) selected @endif> {{ $member_account->bank }} - {{ $member_account->name }} ({{ $member_account->account }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('member_account_id'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('member_account_id') }}</strong>
                                         </span>
                                     @endif
                                 </div>
@@ -542,10 +560,18 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right">
-                                                Payed:
+                                                Paid:
                                             </td>
                                             <td class="text-left" id="loan_detail_amount_payed">
                                                0.00
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">
+                                                Account:
+                                            </td>
+                                            <td class="text-left" id="account">
+                                                {{ $saved_member_account->bank }} - {{ $saved_member_account->name }} ({{ $saved_member_account->account }})
                                             </td>
                                         </tr>
                                         <tr>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Company, Loan, LoanDetail};
+use App\{Company, Loan, LoanDetail, CompanyAccount, MemberAccount};
 use Illuminate\Validation\Rule;
 use Session;
 use Carbon\Carbon;
@@ -81,6 +81,30 @@ class LoanDetailController extends Controller
                 if ($company->fund_lended < 0) {
                     $company->fund_lended = 0;
                 }
+
+                $member_account = MemberAccount::findOrFail($loan_detail->loan->member_account_id);
+                if ($member_account) {
+                    $member_account->amount += $var_payment;
+                    $member_account->lockForUpdate();
+                    $member_account->save();   
+                }
+                else {
+                     // wont likely to happen, but let us add a default company account to prevent orphan records
+                    $company_account = CompanyAccount::first();
+                    if (!$company_account) {
+                        $company_account = new CompanyAccount;
+                        $company_account->company_id = $company->id;
+                        $company_account->bank = "Unamed Bank";
+                        $company_account->name = "Unamed Account";
+                        $company_account->account = "N/A";
+                    }
+                    else {
+                        $company_account->lockForUpdate();
+                    }
+                    $company_account->amount += $var_payment;
+                    $company_account->save();      
+                } 
+                
                 $company->lockForUpdate();
                 $company->save();
 

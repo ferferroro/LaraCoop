@@ -147,19 +147,35 @@
                                     @endif
                                 </div>
 
-                                <label class="col-md-2 col-form-label">{{ __('Referrer') }}</label>
+                                <label class="col-md-2 col-form-label">{{ __('Collector') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <select name="member_id" class="form-control" id="member_id">
+                                        <select name="member_id" class="form-control" id="member_id" onchange="member_id_selected_on_new_loan()">
+                                            <option value="0"> - </option>
                                             @foreach ($members as $member)
-                                                <option value="{{ $member->id }}"  @if(old('member_id') == $member->id) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
-                                                
+                                                @if($member->can_hold_fund)
+                                                    <option value="{{ $member->id }}"  @if(old('member_id') == $member->id) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
                                     @if ($errors->has('member_id'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">
                                             <strong>{{ $errors->first('member_id') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <label class="col-md-2 col-form-label">{{ __('Source Account') }}</label>
+                                <div class="col-md-10">
+
+                                    <div class="form-group">
+                                        <select name="member_account_id" class="form-control" id="member_account_id">
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('member_account_id'))
+                                        <span class="invalid-feedback" style="display: block;" role="alert">
+                                            <strong>{{ $errors->first('member_account_id') }}</strong>
                                         </span>
                                     @endif
                                 </div>

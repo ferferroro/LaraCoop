@@ -132,7 +132,7 @@
                                 <label class="col-md-2 col-form-label">{{ __('Fund Total') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input type="text" name="fund_total" class="form-control" placeholder="0.00" value="{{ $company['fund_total'] ?? '' }}" required>
+                                        <input type="text" name="fund_total" class="form-control" placeholder="0.00" value="{{ $company['fund_total'] ?? '' }}" readonly>
                                     </div>
                                     @if ($errors->has('fund_total'))
                                         <span class="invalid-feedback" style="display: block;" role="alert">

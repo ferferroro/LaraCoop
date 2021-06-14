@@ -176,3 +176,23 @@ function fund_collector_selected_on_new_contribution() {
       }
    });
 }
+
+
+function member_id_selected_on_new_loan() {
+   $.ajax({
+      type:'GET',
+      url: "/transfer/get_account_list/",
+      data:{
+       "id": $("#member_id").val(),
+       "_token": $('#new_transfer_plugin').val(),
+     },
+      success:function(data) {
+         $("#member_account_id").html('');
+         $.each(data, function(){
+            $("#member_account_id").append('<option value="'+ this.id +'">'+ this.bank + " - " + this.name + " (" + this.account + ")" +  '</option>')
+         });
+      }
+   });
+}
+
+
