@@ -370,7 +370,12 @@ class TransferController extends Controller
                 // subtract fund to sending member
                 $member_from = Member::findOrFail($transfer->transfer_from);
 
-                if ($transfer->amount > $member_from->fund_on_hand ) {
+                // subtract fund from sending member account  
+                $account_from = MemberAccount::where('member_id', $transfer->transfer_from)
+                    ->where('id', $transfer->account_from)
+                    ->first();
+
+                if ($transfer->amount > $account_from->amount ) {
                     Session::flash('error_message', "Sender does not have enough fund!");
                     return redirect()->route('transfer.edit', ['id' => $transfer_id]);
                 }
@@ -379,10 +384,7 @@ class TransferController extends Controller
                 $member_from->lockForUpdate();
                 $member_from->save();
 
-                // subtract fund from sending member account  
-                $account_from = MemberAccount::where('member_id', $transfer->transfer_from)
-                    ->where('id', $transfer->account_from)
-                    ->first();
+
                 $account_from->amount -= $transfer->amount;
                 $account_from->lockForUpdate();
                 $account_from->save();
@@ -390,8 +392,14 @@ class TransferController extends Controller
             }
             else {
                 // subtract fund to sending Company
-                $company = Company::first();
-                if ($transfer->amount > $company->fund_available ) {
+                $company = Company::first();                
+
+                // subtract fund from sending company account  
+                $account_from = CompanyAccount::where('company_id', $company->id)
+                    ->where('id', $transfer->account_from)
+                    ->first();
+
+                if ($transfer->amount > $account_from->amount ) {
                     Session::flash('error_message', "Company does not have enough fund!");
                     return redirect()->route('transfer.edit', ['id' => $transfer_id]);
                 }
@@ -399,11 +407,7 @@ class TransferController extends Controller
                 $company->fund_available -= $transfer->amount;
                 $company->lockForUpdate();
                 $company->save();
-
-                // subtract fund from sending company account  
-                $account_from = CompanyAccount::where('company_id', $company->id)
-                    ->where('id', $transfer->account_from)
-                    ->first();
+                
                 $account_from->amount -= $transfer->amount;
                 $account_from->lockForUpdate();
                 $account_from->save();

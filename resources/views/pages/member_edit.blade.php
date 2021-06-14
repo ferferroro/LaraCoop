@@ -54,12 +54,12 @@
                                     </div>
                                 </div>
 
-                                <label class="col-md-2 col-form-label">{{ __('Fund on Hand') }}</label>
+                                <!-- <label class="col-md-2 col-form-label">{{ __('Fund on Hand') }}</label>
                                 <div class="col-md-10">
                                     <div class="form-group disabled">
                                         <input type="text" name="id" class="form-control" placeholder="fund_on_hand" value="{{ $member['fund_on_hand'] ?? '' }}" disabled>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <label class="col-md-2 col-form-label">{{ __('Name') }}</label>
                                 <div class="col-md-10">

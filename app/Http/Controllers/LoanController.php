@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{DB, Auth};
 use App\{Company, Loan, LoanDetail, CompanyAccount, MemberAccount, Member};
 use Illuminate\Validation\Rule;
 use Session;
@@ -31,9 +31,21 @@ class LoanController extends Controller
     {
         $search_string = $request['search_string'] ?? '';
         
-        $loans = Loan::with('borrower')
-            ->where('search_text', 'like', '%' . $search_string . '%' )
-            ->paginate(15);
+        // initilize query
+        $loans = (new Loan)->newQuery();
+        $user = Auth::user();
+
+        // initialize null match these arrays
+        $match_these = [];
+        $match_these[] =  [ 'search_text', 'like' , '%'. $search_string .'%' ];
+        
+        if($user->can_view_other_records == false) {
+            $match_these[] =  [ 'id', '=' , $user->borrower_id ];
+        }
+
+        // add where clause
+        $loans = $loans->where($match_these);
+        $loans = $loans->paginate(15);
 
         return view('pages.loans')
             ->with('loans',  $loans)

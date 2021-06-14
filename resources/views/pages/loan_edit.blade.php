@@ -190,7 +190,9 @@
                                     <div class="form-group">
                                         <select name="member_id" class="form-control" id="member_id">
                                             @foreach ($members as $member)
-                                                <option value="{{ $member->id }}" @if($member->id == $loan['member_id']) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
+                                                @if($member->can_hold_fund)
+                                                    <option value="{{ $member->id }}" @if($member->id == $loan['member_id']) selected @endif> {{ $member->id }}  - {{ $member->name }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
